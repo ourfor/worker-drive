@@ -6,3 +6,10 @@ interface TokenData {
   access_token: string
   refresh_token: string
 }
+
+interface ConfigData {
+  client: string
+  secret: string
+  scope: string[]
+  redirect: string
+}

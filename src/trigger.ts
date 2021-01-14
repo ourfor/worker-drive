@@ -13,10 +13,11 @@ export async function handleSchedule({
           'https://login.microsoftonline.com/common/oauth2/v2.0/token',
         )
         const params = new URLSearchParams()
+        const config = await Config.get()
         params.set('grant_type', 'refresh_token')
-        params.set('client_id', Config.client)
-        params.set('client_secret', Config.secret)
-        params.set('redirect_uri', Config.redirect)
+        params.set('client_id', config.client)
+        params.set('client_secret', config.secret)
+        params.set('redirect_uri', config.redirect)
         params.set('refresh_token', token.refresh_token)
 
         const res = await fetch(url.href, { method: 'post', body: params })

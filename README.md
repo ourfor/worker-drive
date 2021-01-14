@@ -12,6 +12,15 @@ To generate using Wrangler, run this command:
 wrangler generate my-ts-project https://github.com/EverlastingBugstopper/worker-typescript-template
 ```
 
+Config Your Onedrive
+```curl
+curl --location --request POST 'https://api.tellkeep.ml/__conf__' \
+--form 'client="your-app-clientid"' \
+--form 'secret="your-app-secret"' \
+--form 'scope="permission-1,permission-2"' \
+--form 'redirect="https://your-domain/__call__"'
+```
+
 ### 👩 💻 Developing
 
 [`src/index.js`](./src/index.ts) calls the request handler in [`src/handler.ts`](./src/handler.ts), and will return the [request method](https://developer.mozilla.org/en-US/docs/Web/API/Request/method) for the given request.

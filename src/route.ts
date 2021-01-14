@@ -1,5 +1,5 @@
 export class Route {
-  static authReg = /\/__(auth|call)__$/
+  static authReg = /\/__(auth|call|conf)__$/
   static match(url: URL): boolean {
     return Route.authReg.test(url.pathname)
   }
@@ -8,5 +8,8 @@ export class Route {
   }
   static isCall(url: URL): boolean {
     return '/__call__' == url.pathname
+  }
+  static isConf(url: URL): boolean {
+    return '/__conf__' == url.pathname
   }
 }

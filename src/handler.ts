@@ -8,18 +8,36 @@ enum DriveAuthType {
 
 export async function handleRequest(request: Request): Promise<Response> {
   const { method } = request
-  const date = await STORE.get('date')
-  const author = await STORE.get('author')
   const url = new URL(request.url)
   if (Route.match(url)) {
-    if (Route.isAuth(url))
-      return auth(
-        Config.client,
-        Config.scope,
+    let result
+    if (Route.isAuth(url)) {
+      const config = await Config.get()
+      result = auth(
+        config.client,
+        config.scope,
         DriveAuthType.CODE,
-        Config.redirect,
+        config.redirect,
       )
-    else return call(url)
+    } else if (Route.isCall(url)) {
+      result = call(url)
+    } else if (Route.isConf(url) && method.toUpperCase() == 'POST') {
+      try {
+        const params = await request.formData()
+        await Config.set({
+          client: params.get('client') as string,
+          secret: params.get('secret') as string,
+          scope: (params.get('scope') as string).split(','),
+          redirect: params.get('redirect') as string,
+        })
+        result = new Response('配置成功')
+      } catch (error) {
+        result = new Response(error)
+      }
+    } else {
+      result = new Response('URL Not Found')
+    }
+    return result
   } else {
     return link(url.pathname)
   }
@@ -85,11 +103,12 @@ async function call(url: URL): Promise<Response> {
     'https://login.microsoftonline.com/common/oauth2/v2.0/token',
   )
   const params = new URLSearchParams()
-  params.set('client_id', Config.client)
-  params.set('client_secret', Config.secret)
+  const config = await Config.get()
+  params.set('client_id', config.client)
+  params.set('client_secret', config.secret)
   params.set('grant_type', Config.grantType)
-  params.set('scope', Config.scope.join(' '))
-  params.set('redirect_uri', Config.redirect)
+  params.set('scope', config.scope.join(' '))
+  params.set('redirect_uri', config.redirect)
   params.set('code', code)
   const res = await fetch(link.href, { method: 'post', body: params })
   let result
