@@ -1,7 +1,7 @@
-export {};
+export {}
 
 declare global {
-    const MY_ENV_VAR: string
-    const MY_SECRET: string
-    const STORE: KVNamespace
+  const MY_ENV_VAR: string
+  const MY_SECRET: string
+  const STORE: KVNamespace
 }

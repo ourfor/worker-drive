@@ -1,4 +1,4 @@
 export enum DriveAuthType {
-    TOKEN = "token",
-    CODE = "code"
+  TOKEN = 'token',
+  CODE = 'code',
 }
