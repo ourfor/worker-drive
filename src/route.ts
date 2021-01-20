@@ -1,5 +1,5 @@
-import { Config } from "./config"
-import { HttpMethod, HttpStatus } from "./enum"
+import { Action } from "./action"
+import { HttpMethod } from "./enum"
 
 export class Route {
   static authReg = /\/__(auth|call|conf|keep)__$/
@@ -18,7 +18,7 @@ export class Route {
   static isKeep(url: URL): boolean {
     return '/__keep__' == url.pathname
   }
-  static dispatch(req: Request, action: Action) {
+  static async dispatch(req: Request, action: Action): Promise<Response> {
     const { method } = req
     const url = new URL(req.url)
     let result;
@@ -26,16 +26,9 @@ export class Route {
       result = action.get(url,req)
     } else if (method == HttpMethod.POST) {
       result = action.post(url,req)
-    } else if (method==HttpMethod.OPTIONS||method==HttpMethod.HEAD||method==HttpMethod.CONNECT) {
-      result = new Response("",{ status: HttpStatus.OK, headers: Config.corsHeaders })
     } else {
-      result = new Response("METHOD NOT SUPPORT", { status: HttpStatus.NOT_FOUND })
+      result = new Response()
     }
     return result
   }
-}
-
-export interface Action {
-  get(url: URL, req: Request): Promise<Response>|Response
-  post(url: URL, req: Request): Promise<Response>|Response
 }

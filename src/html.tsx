@@ -1,9 +1,9 @@
 import { DriveDataType, DriveFileData, DriveFolderData } from "./enum"
-import { ReactElement, ReactNode } from 'react'
+import { ReactElement } from 'react'
 import { Format } from "./tool";
 import { StyledTable } from "./style";
-import { ServerStyleSheet, StyleSheetManager } from "styled-components";
-import { renderToStaticMarkup, renderToString } from "react-dom/server";
+import { ServerStyleSheet } from "styled-components";
+import { renderToStaticMarkup } from "react-dom/server";
 
 type TableProps = { data: (DriveFileData | DriveFolderData)[], href: string }
 export function Table({ data, href }: TableProps) {
@@ -56,7 +56,7 @@ export function Html({ body, title, style }: HtmlProps) {
 export function render(element: ReactElement): string {
     const sheet = new ServerStyleSheet()
     let html = '';
-    const body = renderToString(sheet.collectStyles(element))
+    const body = renderToStaticMarkup(sheet.collectStyles(element))
     const style = sheet.getStyleTags() // or sheet.getStyleElement();
     html = Html({ body, title: '秘密花园', style })
     sheet.seal()
