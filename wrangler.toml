@@ -1,9 +1,9 @@
-name = "onedrive"
+name = "drive"
 type = "webpack"
 account_id = "c04380e1591f31dd7c42f710541dd5d6"
 workers_dev = true
-route = "api.tellkeep.ml/*"
-zone_id = "ec1677e19b1b70e68d591fa5b8c5aa57"
+route = "drive.ourfor.top/*"
+zone_id = "f137ed703c13d573591738b5021e341a"
 webpack_config = "webpack.config.js"
 
 #{ binding = "STORE", id = "c1bd122c4a5443cd9e3c0321661a3293", preview_id = "6a1ddb03f3ec250963f0a1e46820076f"}
