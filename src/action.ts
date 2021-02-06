@@ -2,6 +2,7 @@ import { auth, call, conf, keep } from "./auth";
 import { HttpStatus } from "./enum";
 import { read } from "./read";
 import { Route } from "./route";
+import { upload } from "./write";
 
 export interface Action {
   get: (url: URL, req: Request) => Promise<Response>;
@@ -32,7 +33,7 @@ export class HttpAction implements Action {
     if (Route.isConf(url)) {
       result = conf(req)
     } else {
-      result = new Response('NOT FOUND', { status: HttpStatus.NOT_FOUND })
+      result = upload(url.pathname, req);
     }
     return result
   }

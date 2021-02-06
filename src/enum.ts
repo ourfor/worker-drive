@@ -13,6 +13,7 @@ export enum HttpMethod {
 export enum HttpStatus {
     NOT_FOUND = 404,
     REDIRECT = 302,
+    UNAUTHORIZED = 401,
     OK = 200
 }
 
