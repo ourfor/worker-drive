@@ -15,7 +15,7 @@ export function Table({ data, href }: TableProps) {
                 <th>修改时间</th>
                 <th>大小</th>
             </thead>
-            <tbody>
+            <tbody data-path={href}>
                 {data.map(({ name, size, createdDateTime, ...res }) => {
                     const type = res.hasOwnProperty('file') ? DriveDataType.FILE : DriveDataType.FOLDER;
                     const date = new Date(createdDateTime!).toLocaleString("zh-cn")
@@ -24,7 +24,7 @@ export function Table({ data, href }: TableProps) {
                             <td><i className={type} /></td>
                             <td><a href={`${href}/${name}`}>{name}</a></td>
                             <td>{date}</td>
-                            <td>{Format.size(size)}</td>
+                            <td data-size={size}>{Format.size(size)}</td>
                         </tr>
                     )
                 })}
