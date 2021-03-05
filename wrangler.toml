@@ -2,7 +2,7 @@ name = "drive"
 type = "webpack"
 account_id = "c04380e1591f31dd7c42f710541dd5d6"
 workers_dev = true
-route = "drive.carebin.cn/*"
+route = "drive.ourfor.top/*"
 zone_id = "f137ed703c13d573591738b5021e341a"
 webpack_config = "webpack.config.js"
 

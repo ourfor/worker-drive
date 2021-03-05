@@ -22,10 +22,12 @@ export class Route {
     const { method } = req
     const url = new URL(req.url)
     let result;
-    if(method == HttpMethod.GET) {
+    if(method == HttpMethod.GET || method == HttpMethod.HEAD) {
       result = action.get(url,req)
     } else if (method == HttpMethod.POST) {
       result = action.post(url,req)
+    } else if (method == HttpMethod.OPTIONS) {
+      result = action.options(url,req)
     } else {
       result = new Response()
     }

@@ -4,7 +4,7 @@ export class Config {
   static readonly grantType: string = 'authorization_code'
   static corsHeaders = {
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,HEAD,OPTIONS,PATCH,PROPFIND,PROPPATCH,MKCOL,COPY,MOVE,LOCK',
+    'Access-Control-Allow-Methods': 'GET,HEAD,POST,OPTIONS',
     'Access-Control-Max-Age': '86400',
     'Access-Control-Allow-Headers': '*',
     'Access-Control-Expose-Headers': '*',
@@ -30,12 +30,13 @@ export class Config {
 
   static withOrigin(origin: string|null): Headers {
     const header = new Headers()
-    header.append('Access-Control-Allow-Origin',origin?origin:"*")
-    header.append('Access-Control-Allow-Methods','GET,PUT,POST,DELETE,HEAD,OPTIONS,PATCH')
-    header.append('Access-Control-Allow-Headers','Origin,Accept,Content-Type,Authorization,Range')
-    header.append('Access-Control-Expose-Headers','*')
-    header.append('Access-Control-Allow-Credentials','true')
-    header.append('Access-Control-Max-Age','86400')
+    header.set('Access-Control-Allow-Origin',origin?origin:"*")
+    header.set('Access-Control-Allow-Methods','GET,PUT,POST,DELETE,HEAD,OPTIONS,PATCH')
+    header.set('Access-Control-Allow-Headers','Origin,Accept,Content-Type,Authorization,Range')
+    header.set('Access-Control-Expose-Headers','*')
+    header.set('Access-Control-Allow-Credentials','true')
+    header.set('Access-Control-Max-Age','86400')
+    header.set("Vary", "Origin")
     return header
   }
 }
