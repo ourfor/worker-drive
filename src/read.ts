@@ -23,12 +23,10 @@ export async function read(path: string, req: Request, root: boolean = false): P
                         file: { mimeType: type },
                     } = data
                     const origin = await fetch(href, { headers: { authorization } })
+                    const headers = Config.withOrigin(req.headers.get("origin"))
+                    headers.append('Content-Type',type)
                     result = new Response(origin.body, {
-                        headers: {
-                            ...res.headers,
-                            ...Config.corsHeaders,
-                            'Content-Type': type,
-                        },
+                        headers
                     });
                     break;
                 }
