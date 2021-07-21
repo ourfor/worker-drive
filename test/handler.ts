@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { handleRequest } from '../src/handler'
+import { handleRequest } from "@service/handler"
 
 describe('handler returns response with request method', () => {
   const methods = [

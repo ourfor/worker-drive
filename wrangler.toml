@@ -1,5 +1,5 @@
 name = "drive"
-type = "webpack"
+type = "javascript"
 account_id = "c04380e1591f31dd7c42f710541dd5d6"
 workers_dev = true
 route = "drive.ourfor.top/*"
@@ -9,3 +9,8 @@ webpack_config = "webpack.config.js"
 kv_namespaces = [
    { binding = "STORE", id = "c1bd122c4a5443cd9e3c0321661a3293", preview_id = "c1bd122c4a5443cd9e3c0321661a3293" }
 ]
+
+[build]
+command = "npm install && npm run build"
+[build.upload]
+format = "service-worker"

@@ -1,4 +1,6 @@
-import { Config } from './config'
+import { CONST_URL } from '@src/const'
+import { TokenData } from '@type/TokenData'
+import { Cors } from '@config/Cors'
 
 export async function handleSchedule({
   scheduledTime,
@@ -9,11 +11,9 @@ export async function handleSchedule({
       const json = await STORE.get('auth')
       if (json) {
         const token: TokenData = JSON.parse(json)
-        const url = new URL(
-          'https://login.microsoftonline.com/common/oauth2/v2.0/token',
-        )
+        const url = new URL(CONST_URL.TOKEN)
         const params = new URLSearchParams()
-        const config = await Config.get()
+        const config = await Cors.get()
         params.set('grant_type', 'refresh_token')
         params.set('client_id', config.client)
         params.set('client_secret', config.secret)

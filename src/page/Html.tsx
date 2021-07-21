@@ -1,9 +1,9 @@
-import { DriveDataType, DriveFileData, DriveFolderData } from "./enum"
+import { DriveDataType, DriveFileData, DriveFolderData } from "../enum"
 import { ReactElement } from 'react'
-import { Format } from "./tool";
-import { StyledTable } from "./style";
 import { ServerStyleSheet } from "styled-components";
 import { renderToStaticMarkup } from "react-dom/server";
+import { StyledTable } from "@style/StyledTable";
+import { Format } from "@util/Format";
 
 type TableProps = { data: (DriveFileData | DriveFolderData)[], href: string }
 export function Table({ data, href }: TableProps) {

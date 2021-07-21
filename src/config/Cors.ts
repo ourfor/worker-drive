@@ -1,6 +1,6 @@
-import { ConfigData } from "./type"
+import { ConfigData } from "@type/ConfigData"
 
-export class Config {
+export class Cors {
   static readonly grantType: string = 'authorization_code'
   static corsHeaders = {
     'Access-Control-Allow-Origin': '*',

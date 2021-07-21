@@ -1,5 +1,5 @@
-import { HttpAction } from './action'
-import { Route } from './route'
+import { HttpAction } from '@src/action'
+import { Route } from '@route/route'
 
 const action = new HttpAction()
 

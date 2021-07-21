@@ -11,14 +11,33 @@
     "sourceMap": true,
     "jsx": "react-jsx",
     "esModuleInterop": true,
-    "types": ["@cloudflare/workers-types","react","react-dom"]
+    "baseUrl": "./src",
+    "types": [
+      "@cloudflare/workers-types",
+      "react",
+      "react-dom",
+      "@types/jest",
+      "@types/service-worker-mock"
+    ],
+    "paths": {
+      "@type/*": ["type/*"],
+      "@route/*": ["route/*"],
+      "@service/*": ["service/*"],
+      "@config/*": ["config/*"],
+      "@page/*": ["page/*"],
+      "@util/*": ["util/*"],
+      "@style/*": ["style/*"],
+      "@data/*": ["data/*"],
+      "@lang/*": ["lang/*"],
+      "@src/*": ["./*"]
+    }
   },
   "include": [
-    "./src/*.ts",
-    "./src/*.tsx",
-    "./test/*.ts",
     "./src/**/*.ts",
     "./src/**/*.tsx",
+    "./src/*.tsx",
+    "./src/*.ts",
+    "./test/*.ts",
     "./test/**/*.ts",
     "./node_modules/@cloudflare/workers-types/index.d.ts"
   ],

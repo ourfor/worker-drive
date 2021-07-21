@@ -1,9 +1,9 @@
-import { auth, call, conf, keep } from "./auth";
-import { Config } from "./config";
-import { HttpStatus } from "./enum";
-import { read } from "./read";
-import { Route } from "./route";
-import { upload } from "./write";
+import { auth, call, conf, keep } from "@service/auth";
+import { Cors } from "@config/Cors";
+import { HttpStatus } from "@src/enum";
+import { read } from "@service/read";
+import { Route } from "@route/route";
+import { upload } from "@service/write";
 
 export interface Action {
   get: (url: URL, req: Request) => Promise<Response>;
@@ -52,7 +52,7 @@ export class HttpAction implements Action {
       // you can do that here.
       const allowHeaders = req.headers.get("Access-Control-Request-Headers")
       const respHeaders = {
-        ...Config.corsHeaders,
+        ...Cors.corsHeaders,
       // Allow all future content Request headers to go back to browser
       // such as Authorization (Bearer) or X-Client-Name-Version
         "Access-Control-Allow-Headers": allowHeaders?allowHeaders:"*"

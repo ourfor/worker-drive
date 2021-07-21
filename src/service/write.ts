@@ -1,5 +1,5 @@
-import { HttpMethod, HttpStatus } from "./enum";
-import { TokenData } from "./type";
+import { TokenData } from "@type/TokenData";
+import { HttpMethod, HttpStatus } from "@src/enum";
 
 type UploadResponse = { uploadUrl: string }
 export async function upload(path: string, req: Request): Promise<Response> {

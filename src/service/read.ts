@@ -1,8 +1,8 @@
-import { Config } from "./config"
-import { DriveAllData, DriveDataType, log, DriveDataInfo } from "./enum"
-import { TokenData } from "./type"
-import { render, Table } from './html'
-import { cookies } from "./cookie"
+import { Cors } from "@config/Cors"
+import { DriveAllData, DriveDataType, log, DriveDataInfo } from "@src/enum"
+import { render, Table } from '@page/Html'
+import { TokenData } from "@type/TokenData"
+import { cookies } from "@util/cookie"
 
 export async function read(path: string, req: Request, root: boolean = false): Promise<Response> {
     const url = `https://graph.microsoft.com/v1.0/me/drive/root${root?`/children`:`:${path}`}`
@@ -23,7 +23,7 @@ export async function read(path: string, req: Request, root: boolean = false): P
                         file: { mimeType: type },
                     } = data
                     const origin = await fetch(href, { headers: { authorization } })
-                    const headers = Config.withOrigin(req.headers.get("origin"))
+                    const headers = Cors.withOrigin(req.headers.get("origin"))
                     headers.append('Content-Type',type)
                     result = new Response(origin.body, {
                         headers

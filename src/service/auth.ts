@@ -1,13 +1,13 @@
-import { Config } from "./config"
-import { DriveAuthType, HttpStatus } from "./enum"
-import { TokenData } from "./type"
+import { Cors } from "@config/Cors"
+import { CONST_URL } from "@src/const"
+import { DriveAuthType, HttpStatus } from "@src/enum"
+import { TokenData } from "@type/TokenData"
+import { i18n, I18N_KEY } from "@lang/i18n"
 
 export async function auth(): Promise<Response> {
-    const config = await Config.get()
+    const config = await Cors.get()
     const { redirect, scope, client } = config
-    const url = new URL(
-        'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
-    )
+    const url = new URL(CONST_URL.AUTHORIZATION)
     url.searchParams.set('client_id', client)
     url.searchParams.set('scope', scope.join(' '))
     url.searchParams.set('response_type', DriveAuthType.CODE)
@@ -24,14 +24,12 @@ export async function auth(): Promise<Response> {
 
 export async function call(url: URL): Promise<Response> {
     const code = url.searchParams.get('code')!
-    const link = new URL(
-        'https://login.microsoftonline.com/common/oauth2/v2.0/token',
-    )
+    const link = new URL(CONST_URL.TOKEN)
     const params = new URLSearchParams()
-    const config = await Config.get()
+    const config = await Cors.get()
     params.set('client_id', config.client)
     params.set('client_secret', config.secret)
-    params.set('grant_type', Config.grantType)
+    params.set('grant_type', Cors.grantType)
     params.set('scope', config.scope.join(' '))
     params.set('redirect_uri', config.redirect)
     params.set('code', code)
@@ -41,7 +39,7 @@ export async function call(url: URL): Promise<Response> {
         try {
             const data: TokenData = await res.json()
             await STORE.put('auth', JSON.stringify(data))
-            result = new Response('登录成功')
+            result = new Response(i18n(I18N_KEY.LOGIN_SUCCESS))
         } catch (error) {
             result = new Response(error)
         }
@@ -55,7 +53,7 @@ export async function conf(request: Request): Promise<Response> {
     let result;
     try {
         const params = await request.formData()
-        await Config.set({
+        await Cors.set({
             client: params.get('client') as string,
             secret: params.get('secret') as string,
             scope: (params.get('scope') as string).split(','),

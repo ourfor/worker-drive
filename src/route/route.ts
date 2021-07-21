@@ -1,10 +1,13 @@
-import { Action } from "./action"
-import { HttpMethod } from "./enum"
+import { Action } from "@src/action"
+import { HttpMethod } from "@src/enum"
 
 export class Route {
   static authReg = /\/__(auth|call|conf|keep)__$/
   static match(url: URL): boolean {
     return Route.authReg.test(url.pathname)
+  }
+  static isInfo(url: URL): boolean {
+    return '/__info__' == url.pathname
   }
   static isAuth(url: URL): boolean {
     return '/__auth__' == url.pathname
