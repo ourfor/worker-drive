@@ -69,7 +69,7 @@ export async function conf(request: Request): Promise<Response> {
 export async function keep(request: Request): Promise<Response> {
     const params = new URL(request.url).searchParams
     const id = params.get('id')
-    return new Response('认证成功', {
+    return new Response(i18n(I18N_KEY.AUTHORIZE_SUCCESS), {
         headers: {
             'Set-Cookie': `id=${id};`
         }

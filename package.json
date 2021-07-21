@@ -2,7 +2,7 @@
   "name": "pname",
   "version": "1.0.0",
   "description": "Cloudflare worker TypeScript template",
-  "main": "index.js",
+  "main": "dist/worker.js",
   "scripts": {
     "build": "webpack",
     "dev": "NODE_ENV=development npm run build",
