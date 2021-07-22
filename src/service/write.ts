@@ -1,5 +1,6 @@
 import { TokenData } from "@type/TokenData";
 import { HttpMethod, HttpStatus } from "@src/enum";
+import { i18n, I18N_KEY } from "@lang/i18n";
 
 type UploadResponse = { uploadUrl: string }
 export async function upload(path: string, req: Request): Promise<Response> {
@@ -26,7 +27,7 @@ export async function upload(path: string, req: Request): Promise<Response> {
             }
         })
     } else {
-        return new Response('没有登陆，无法上传文件',{
+        return new Response(i18n(I18N_KEY.NEED_LOGIN_TO_UPLOAD),{
             status: HttpStatus.UNAUTHORIZED
         })
     }

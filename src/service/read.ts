@@ -3,6 +3,7 @@ import { DriveAllData, DriveDataType, log, DriveDataInfo } from "@src/enum"
 import { render, Table } from '@page/Html'
 import { TokenData } from "@type/TokenData"
 import { cookies } from "@util/cookie"
+import { i18n, I18N_KEY } from "@lang/i18n"
 
 export async function read(path: string, req: Request, root: boolean = false): Promise<Response> {
     const url = `https://graph.microsoft.com/v1.0/me/drive/root${root?`/children`:`:${path}`}`
@@ -12,7 +13,8 @@ export async function read(path: string, req: Request, root: boolean = false): P
         const token: TokenData = JSON.parse(json)
         const authorization = `${token.token_type} ${token.access_token}`
         try {
-            const res = await fetch(url, { headers: { authorization } })
+            const headers = { ...req.headers, authorization }
+            const res = await fetch(url, { headers })
             const data: DriveAllData = await res.json()
             DriveDataInfo.info(data)
             log.info(data)
@@ -33,7 +35,7 @@ export async function read(path: string, req: Request, root: boolean = false): P
                 case DriveDataType.FOLDER: {
                     try {
                         if('ourfor'==cookies(req,'id')) result = read(path+':/children',req)
-                        else throw new Error('Permission deny')
+                        else throw new Error(i18n(I18N_KEY.PERMISSION_DENY))
                     } catch(error) {
                         result = new Response(error)
                     }
@@ -68,7 +70,7 @@ export async function read(path: string, req: Request, root: boolean = false): P
             result = new Response(error)
         }
     } else {
-        result = new Response('please login to enable this function')
+        result = new Response(i18n(I18N_KEY.NEED_LOGIN_TO_CONTINUE))
     }
     return result
 }

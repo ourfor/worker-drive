@@ -1,6 +1,7 @@
 import { CONST_URL } from '@src/const'
 import { TokenData } from '@type/TokenData'
 import { Cors } from '@config/Cors'
+import { i18n, I18N_KEY } from '@lang/i18n'
 
 export async function handleSchedule({
   scheduledTime,
@@ -39,7 +40,7 @@ export async function handleSchedule({
         await STORE.put('refreshed', `${refreshed}`)
         resolve(result)
       } else {
-        resolve('need init')
+        resolve(i18n(I18N_KEY.NEED_INIT))
       }
     } catch (error) {
       reject(error)

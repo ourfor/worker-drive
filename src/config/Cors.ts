@@ -32,10 +32,11 @@ export class Cors {
     const header = new Headers()
     header.set('Access-Control-Allow-Origin',origin?origin:"*")
     header.set('Access-Control-Allow-Methods','GET,PUT,POST,DELETE,HEAD,OPTIONS,PATCH')
-    header.set('Access-Control-Allow-Headers','Origin,Accept,Content-Type,Authorization,Range')
+    header.set('Access-Control-Allow-Headers','Origin,Accept,Content-Type,Authorization,Range,Accept-Ranges')
     header.set('Access-Control-Expose-Headers','*')
     header.set('Access-Control-Allow-Credentials','true')
     header.set('Access-Control-Max-Age','86400')
+    header.set('Accept-Ranges','bytes')
     header.set("Vary", "Origin")
     return header
   }

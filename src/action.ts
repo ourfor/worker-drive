@@ -1,9 +1,10 @@
-import { auth, call, conf, keep } from "@service/auth";
+import { auth, call, conf, info, keep } from "@service/auth";
 import { Cors } from "@config/Cors";
 import { HttpStatus } from "@src/enum";
 import { read } from "@service/read";
 import { Route } from "@route/route";
 import { upload } from "@service/write";
+import { i18n, I18N_KEY } from "@lang/i18n";
 
 export interface Action {
   get: (url: URL, req: Request) => Promise<Response>;
@@ -21,8 +22,10 @@ export class HttpAction implements Action {
         result = call(url)
       } else if (Route.isKeep(url)) {
         result = keep(req)
+      } else if (Route.isInfo(url)) {
+        result = info()
       } else {
-        result = new Response('NOT FOUND', { status: HttpStatus.NOT_FOUND })
+        result = new Response(i18n(I18N_KEY.NOT_FOUND), { status: HttpStatus.NOT_FOUND })
       }
     } else {
       result = read(url.pathname, req)

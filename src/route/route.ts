@@ -2,7 +2,7 @@ import { Action } from "@src/action"
 import { HttpMethod } from "@src/enum"
 
 export class Route {
-  static authReg = /\/__(auth|call|conf|keep)__$/
+  static authReg = /\/__(auth|call|conf|keep|info)__$/
   static match(url: URL): boolean {
     return Route.authReg.test(url.pathname)
   }
