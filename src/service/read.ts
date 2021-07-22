@@ -28,7 +28,8 @@ export async function read(path: string, req: Request, root: boolean = false): P
                     const headers = Cors.withOrigin(req.headers.get("origin"))
                     headers.append('Content-Type',type)
                     result = new Response(origin.body, {
-                        headers
+                        headers,
+                        status: req.headers.get("Range") ? 206 : origin.status
                     });
                     break;
                 }
