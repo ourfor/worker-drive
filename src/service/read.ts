@@ -13,24 +13,21 @@ export async function read(path: string, req: Request, root: boolean = false): P
         const token: TokenData = JSON.parse(json)
         const authorization = `${token.token_type} ${token.access_token}`
         try {
-            const headers = { ...req.headers, authorization }
-            const res = await fetch(url, { headers })
+            const request = new Request(url, req)
+            const headers = request.headers
+            headers.set("Authorization", authorization)
+            const res = await fetch(request)
             const data: DriveAllData = await res.json()
             DriveDataInfo.info(data)
-            log.info(data)
             switch(data.type) {
                 case DriveDataType.FILE: {
                     const {
                         '@microsoft.graph.downloadUrl': href,
                         file: { mimeType: type },
                     } = data
-                    const origin = await fetch(href, { headers: { authorization } })
-                    const headers = Cors.withOrigin(req.headers.get("origin"))
-                    headers.append('Content-Type',type)
-                    result = new Response(origin.body, {
-                        headers,
-                        status: req.headers.get("Range") ? 206 : origin.status
-                    });
+                    const origin = await fetch(href, { headers })
+                    result = new Response(origin.body, origin);
+                    Cors.withOrigin(req.headers.get("origin"), result.headers)
                     break;
                 }
                 case DriveDataType.FOLDER: {

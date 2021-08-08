@@ -15,7 +15,7 @@ export interface Action {
 export class HttpAction implements Action {
   async get(url: URL, req: Request) {
     let result;
-    if (Route.match(url)) {
+    if (url.pathname.startsWith("/__")) {
       if (Route.isAuth(url)) {
         result = auth()
       } else if (Route.isCall(url)) {

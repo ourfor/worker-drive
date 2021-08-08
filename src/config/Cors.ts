@@ -28,16 +28,15 @@ export class Cors {
     return STORE.put('config', JSON.stringify(config))
   }
 
-  static withOrigin(origin: string|null): Headers {
-    const header = new Headers()
-    header.set('Access-Control-Allow-Origin',origin?origin:"*")
-    header.set('Access-Control-Allow-Methods','GET,PUT,POST,DELETE,HEAD,OPTIONS,PATCH')
-    header.set('Access-Control-Allow-Headers','Origin,Accept,Content-Type,Authorization,Range,Accept-Ranges')
-    header.set('Access-Control-Expose-Headers','*')
-    header.set('Access-Control-Allow-Credentials','true')
-    header.set('Access-Control-Max-Age','86400')
-    header.set('Accept-Ranges','bytes')
-    header.set("Vary", "Origin")
-    return header
+  static withOrigin(origin: string|null, headers: Headers = new Headers()): Headers {
+    headers.set('Access-Control-Allow-Origin', origin ? origin : "*")
+    headers.set('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,HEAD,OPTIONS,PATCH')
+    headers.set('Access-Control-Allow-Headers', 'Origin,Accept,Content-Type,Authorization,Range,Accept-Ranges')
+    headers.set('Access-Control-Expose-Headers', '*')
+    headers.set('Access-Control-Allow-Credentials', 'true')
+    headers.set('Access-Control-Max-Age', '86400')
+    headers.set('Accept-Ranges', 'bytes')
+    headers.set("Vary", "Origin")
+    return headers
   }
 }
