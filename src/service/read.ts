@@ -22,16 +22,17 @@ export async function read(path: string, req: Request, root: boolean = false): P
             switch(data.type) {
                 case DriveDataType.FILE: {
                     const {
-                        '@microsoft.graph.downloadUrl': href,
-                        file: { mimeType: type },
+                        '@microsoft.graph.downloadUrl': href
                     } = data
                     const origin = await fetch(href, { headers })
                     result = new Response(origin.body, origin);
                     Cors.withOrigin(req.headers.get("origin"), result.headers)
-                    const params = new URL(request.url).searchParams
+                    const params = new URL(req.url).searchParams
                     const disposition = params.get("disposition")
                     if (disposition) {
-                        result.headers.set("Content-Disposition", disposition)
+                        if (disposition !== "attachment") {
+                            result.headers.set("Content-Disposition", disposition)
+                        }
                     } else {
                         result.headers.delete("Content-Disposition")
                     }
