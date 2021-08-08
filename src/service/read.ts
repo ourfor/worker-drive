@@ -28,6 +28,13 @@ export async function read(path: string, req: Request, root: boolean = false): P
                     const origin = await fetch(href, { headers })
                     result = new Response(origin.body, origin);
                     Cors.withOrigin(req.headers.get("origin"), result.headers)
+                    const params = new URL(request.url).searchParams
+                    const disposition = params.get("disposition")
+                    if (disposition) {
+                        result.headers.set("Content-Disposition", disposition)
+                    } else {
+                        result.headers.delete("Content-Disposition")
+                    }
                     break;
                 }
                 case DriveDataType.FOLDER: {
