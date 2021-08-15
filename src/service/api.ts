@@ -3,8 +3,9 @@ import { CONST_URL, TOKEN } from "@src/const"
 import { DriveAuthType, HttpStatus, ResponseContentType } from "@src/enum"
 import { TokenData } from "@type/TokenData"
 import { i18n, I18N_KEY } from "@lang/i18n"
-import { redirect } from "@page/Html"
+import { PlayerHTML, redirect, render } from "@page/Html"
 import { LoginSuccessTip } from "@page/Login"
+import { Player } from "@page/Player"
 
 export async function auth(): Promise<Response> {
     const config = await Cors.get()
@@ -85,6 +86,41 @@ export async function keep(request: Request): Promise<Response> {
     return new Response(i18n(I18N_KEY.NOT_FOUND))
 }
 
+export async function play(req: Request): Promise<Response> {
+    const params = new URL(req.url).searchParams
+    const src = params.get("src")
+    if (src) {
+        const url = new URL(src)
+        const dir = url.pathname.substring(0, url.pathname.lastIndexOf("/"))
+        let title = params.get("title") ?? ""
+        let poster = params.get("poster") ?? `${url.origin}${dir}/fanart.jpg`
+        const caption = params.get("caption") ?? ""
+        const thumbnails = params.get("thumbnails") ?? ""
+        const needHLS = !src.endsWith(".mp4")
+
+        if (poster.length === 0) {
+            poster = `${url.origin}${dir}/fanart.jpg`
+        }
+
+        return new Response(PlayerHTML({
+            title,
+            src,
+            poster,
+            thumbnails,
+            caption,
+            needHLS
+        }), {
+            headers: {
+                "Content-Type": ResponseContentType.HTML
+            }
+        })
+    }
+    return new Response(render(Player()), {
+        headers: {
+            "Content-Type": ResponseContentType.HTML
+        }
+    })
+}
 
 export async function info(): Promise<Response> {
     const data = {

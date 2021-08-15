@@ -13,7 +13,7 @@ export const StyledForm = styled.form`
         border-radius: 0.2em;
         text-align: center;
     }
-    &>input {
+    &>input, &>textarea {
         text-align: center;
         border-width: 1px;
         border-radius: 0.5em;
@@ -25,6 +25,12 @@ export const StyledForm = styled.form`
         &:hover {
             border-color: pink;
         }
+    }
+    &>textarea {
+        display: block;
+        margin: 1em;
+        min-width: 30em;
+        min-height: 5em;  
     }
     &>button {
         border-width: 1px;

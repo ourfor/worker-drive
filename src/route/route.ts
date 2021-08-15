@@ -24,6 +24,9 @@ export class Route {
   static isLogin(url: URL): boolean {
     return '/__login__' == url.pathname
   }
+  static isPlay(url: URL): boolean {
+    return '/__play__' == url.pathname
+  }
   static async dispatch(req: Request, action: Action): Promise<Response> {
     const { method } = req
     const url = new URL(req.url)

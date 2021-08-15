@@ -1,4 +1,4 @@
-import { auth, call, conf, info, keep } from "@service/auth";
+import { auth, call, conf, info, keep, play } from "@service/api";
 import { Cors } from "@config/Cors";
 import { HttpStatus } from "@src/enum";
 import { read } from "@service/read";
@@ -25,6 +25,8 @@ export class HttpAction implements Action {
         result = keep(req)
       } else if (Route.isInfo(url)) {
         result = info()
+      } else if (Route.isPlay(url)) {
+        result = play(req)
       } else if (Route.isLogin(url)) {
         result = login()
       } else {

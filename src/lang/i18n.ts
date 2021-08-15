@@ -14,7 +14,14 @@ export enum I18N_KEY {
     LOGIN_USERNAME,
     LOGIN_PASSWORD,
     LOGIN_SUBMIT,
-    LOGIN_TITLE
+    LOGIN_TITLE,
+    PLAYER_TITLE,
+    PLAYER_SOURCE,
+    PLAYER_POSTER,
+    PLAYER_THUMBNAILS,
+    PLAYER_CAPTION,
+    PLAYER_NAME,
+    PLAYER_START
 }
 
 export default interface I18N_MAP {
@@ -22,6 +29,13 @@ export default interface I18N_MAP {
 }
 
 const CONST_STRING: I18N_MAP = {
+    PLAYER_TITLE: "📺 看什么看",
+    PLAYER_START: "🔥 点火",
+    PLAYER_SOURCE: "片源",
+    PLAYER_POSTER: "封面图",
+    PLAYER_THUMBNAILS: "预览图",
+    PLAYER_CAPTION: "字幕",
+    PLAYER_NAME: "看的什么",
     LOGIN_TITLE: "🌸 秘密花园",
     LOGIN_USERNAME: "👤 用户名",
     LOGIN_PASSWORD: "🙈 密码",
