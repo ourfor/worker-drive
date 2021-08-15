@@ -10,7 +10,11 @@ export enum I18N_KEY {
     PERMISSION_DENY,
     NEED_INIT,
     NOT_FOUND,
-    NEED_LOGIN_TO_UPLOAD
+    NEED_LOGIN_TO_UPLOAD,
+    LOGIN_USERNAME,
+    LOGIN_PASSWORD,
+    LOGIN_SUBMIT,
+    LOGIN_TITLE
 }
 
 export default interface I18N_MAP {
@@ -18,8 +22,12 @@ export default interface I18N_MAP {
 }
 
 const CONST_STRING: I18N_MAP = {
-    LOGIN_SUCCESS: "登录成功",
-    AUTHORIZE_SUCCESS: "认证成功",
+    LOGIN_TITLE: "🌸 秘密花园",
+    LOGIN_USERNAME: "👤 用户名",
+    LOGIN_PASSWORD: "🙈 密码",
+    LOGIN_SUBMIT: "登录",
+    LOGIN_SUCCESS: "🎉 登录成功",
+    AUTHORIZE_SUCCESS: "👏 认证成功",
     NEED_LOGIN_TO_CONTINUE: "需要登录账户才能继续使用",
     PERMISSION_DENY: "缺少相关权限",
     NEED_INIT: "需要初始化",

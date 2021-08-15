@@ -3,6 +3,9 @@ import styled from "styled-components"
 export const StyledTable = styled.table`
     border-spacing: 0;
     border: 1px solid gray;
+    margin-left: 1em;
+    margin-top: 1em;
+    background: white;
     & td {
         border-top: 0.5px solid red;
         border-left: 1px solid red;

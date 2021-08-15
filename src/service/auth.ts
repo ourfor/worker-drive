@@ -1,8 +1,10 @@
 import { Cors } from "@config/Cors"
-import { CONST_URL } from "@src/const"
-import { DriveAuthType, HttpStatus } from "@src/enum"
+import { CONST_URL, TOKEN } from "@src/const"
+import { DriveAuthType, HttpStatus, ResponseContentType } from "@src/enum"
 import { TokenData } from "@type/TokenData"
 import { i18n, I18N_KEY } from "@lang/i18n"
+import { redirect } from "@page/Html"
+import { LoginSuccessTip } from "@page/Login"
 
 export async function auth(): Promise<Response> {
     const config = await Cors.get()
@@ -67,13 +69,20 @@ export async function conf(request: Request): Promise<Response> {
 }
 
 export async function keep(request: Request): Promise<Response> {
-    const params = new URL(request.url).searchParams
-    const id = params.get('id')
-    return new Response(i18n(I18N_KEY.AUTHORIZE_SUCCESS), {
-        headers: {
-            'Set-Cookie': `id=${id};`
-        }
-    })
+    // const params = new URL(request.url).searchParams
+    // const id = params.get('id')
+    const data = await request.formData()
+    const username = data.get("username")
+    const password = data.get("password")
+    if (username === TOKEN.USERNAME && password === TOKEN.PASSWORD) {
+        return new Response(redirect(LoginSuccessTip(), "/"), {
+            headers: {
+                "Set-Cookie": `${TOKEN.KEY}=${TOKEN.VALUE};`,
+                "Content-Type": ResponseContentType.HTML
+            }
+        })
+    }
+    return new Response(i18n(I18N_KEY.NOT_FOUND))
 }
 
 

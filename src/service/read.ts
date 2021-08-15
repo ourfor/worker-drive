@@ -1,12 +1,14 @@
 import { Cors } from "@config/Cors"
-import { DriveAllData, DriveDataType, log, DriveDataInfo } from "@src/enum"
-import { render, Table } from '@page/Html'
+import { DriveAllData, DriveDataType, log, DriveDataInfo, ResponseContentType } from "@src/enum"
+import { render } from '@page/Html'
 import { TokenData } from "@type/TokenData"
 import { cookies } from "@util/cookie"
 import { i18n, I18N_KEY } from "@lang/i18n"
+import { FileList } from "@page/FileList"
+import { TOKEN } from "@src/const"
 
-export async function read(path: string, req: Request, root: boolean = false): Promise<Response> {
-    const url = `https://graph.microsoft.com/v1.0/me/drive/root${root?`/children`:`:${path}`}`
+export async function read(path: string, req: Request, isRoot: boolean = false): Promise<Response> {
+    const url = `https://graph.microsoft.com/v1.0/me/drive/root${isRoot ? `/children` : `:${path}`}`
     const json = await STORE.get('auth')
     let result
     if (json) {
@@ -40,8 +42,11 @@ export async function read(path: string, req: Request, root: boolean = false): P
                 }
                 case DriveDataType.FOLDER: {
                     try {
-                        if('ourfor'==cookies(req,'id')) result = read(path+':/children',req)
-                        else throw new Error(i18n(I18N_KEY.PERMISSION_DENY))
+                        if(TOKEN.VALUE == cookies(req, TOKEN.KEY)) {
+                            result = read(`${path}:/children`, req)
+                        } else {
+                            throw new Error(i18n(I18N_KEY.PERMISSION_DENY))
+                        }
                     } catch(error) {
                         result = new Response(error)
                     }
@@ -50,22 +55,26 @@ export async function read(path: string, req: Request, root: boolean = false): P
                 case DriveDataType.ITEMS: {
                     const { value: items } = data;
                     const href = path.replace(':/children','')                    
-                    const props = { data: items, href: href==="/"?"":href }
-                    result = new Response(render(Table(props)),{
+                    const props = { data: items, href: href === "/" ? "" : href }
+                    result = new Response(render(FileList(props)),{
                         headers: {
-                            'content-type': 'text/html'
+                            'content-type': ResponseContentType.HTML
                         }
                     })
                     break;
                 }
                 case DriveDataType.ERROR: {
                     if(path.endsWith('/')) {
-                        if('ourfor'===cookies(req,'id')) {
-                            if (path==="/") result = read('/',req,true)
-                            else result = read(path+':/children',req)
-                        } else result = read(path+'/index.html',req)
-                    }
-                    else result = new Response(JSON.stringify({
+                        if(TOKEN.VALUE === cookies(req, TOKEN.KEY)) {
+                            if (path === "/") {
+                                result = read('/', req, true)
+                            } else {
+                                result = read(path+':/children', req)
+                            }
+                        } else {
+                            result = read(path+'/index.html', req)
+                        }
+                    } else result = new Response(JSON.stringify({
                         details: data.error,
                         path
                     }))

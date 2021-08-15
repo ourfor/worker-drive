@@ -21,6 +21,9 @@ export class Route {
   static isKeep(url: URL): boolean {
     return '/__keep__' == url.pathname
   }
+  static isLogin(url: URL): boolean {
+    return '/__login__' == url.pathname
+  }
   static async dispatch(req: Request, action: Action): Promise<Response> {
     const { method } = req
     const url = new URL(req.url)

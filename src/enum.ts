@@ -17,6 +17,11 @@ export enum HttpStatus {
     OK = 200
 }
 
+export enum ResponseContentType {
+    HTML = "text/html; charset=utf-8",
+    JSON = "application/json; charset=utf-8"
+}
+
 export enum DriveAuthType {
     TOKEN = 'token',
     CODE = 'code',

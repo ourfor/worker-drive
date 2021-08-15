@@ -5,6 +5,7 @@ import { read } from "@service/read";
 import { Route } from "@route/route";
 import { upload } from "@service/write";
 import { i18n, I18N_KEY } from "@lang/i18n";
+import { login } from "@service/login";
 
 export interface Action {
   get: (url: URL, req: Request) => Promise<Response>;
@@ -24,6 +25,8 @@ export class HttpAction implements Action {
         result = keep(req)
       } else if (Route.isInfo(url)) {
         result = info()
+      } else if (Route.isLogin(url)) {
+        result = login()
       } else {
         result = new Response(i18n(I18N_KEY.NOT_FOUND), { status: HttpStatus.NOT_FOUND })
       }
@@ -37,6 +40,8 @@ export class HttpAction implements Action {
     let result;
     if (Route.isConf(url)) {
       result = conf(req)
+    } else if (Route.isKeep(url)) {
+        result = keep(req)
     } else {
       result = upload(url.pathname, req);
     }
