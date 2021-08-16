@@ -1,7 +1,6 @@
-import { render } from "@page/Html"
+import { render } from "@page/render"
 import { Login } from "@page/Login"
 import { ResponseContentType } from "@src/enum"
-import { renderToString } from "react-dom/server"
 
 export async function login(): Promise<Response> {
     const html = render(<Login />)

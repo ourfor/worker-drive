@@ -24,6 +24,7 @@
       "@route/*": ["route/*"],
       "@service/*": ["service/*"],
       "@config/*": ["config/*"],
+      "@api/*": ["api/*"],
       "@page/*": ["page/*"],
       "@util/*": ["util/*"],
       "@style/*": ["style/*"],

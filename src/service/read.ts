@@ -1,6 +1,6 @@
 import { Cors } from "@config/Cors"
 import { DriveAllData, DriveDataType, log, DriveDataInfo, ResponseContentType } from "@src/enum"
-import { render } from '@page/Html'
+import { render } from '@page/render'
 import { TokenData } from "@type/TokenData"
 import { cookies } from "@util/cookie"
 import { i18n, I18N_KEY } from "@lang/i18n"

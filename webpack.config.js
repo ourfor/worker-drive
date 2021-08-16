@@ -17,6 +17,7 @@ module.exports = {
       "@route": path.resolve(__dirname, "./src/route"),
       "@service": path.resolve(__dirname, "./src/service"),
       "@config": path.resolve(__dirname, "./src/config"),
+      "@api": path.resolve(__dirname, "./src/api"),
       "@page": path.resolve(__dirname, "./src/page"),
       "@util": path.resolve(__dirname, "./src/util"),
       "@style": path.resolve(__dirname, "./src/style"),

@@ -1,4 +1,3 @@
-import { auth, call, conf, info, keep, play } from "@service/api";
 import { Cors } from "@config/Cors";
 import { HttpStatus } from "@src/enum";
 import { read } from "@service/read";
@@ -6,6 +5,7 @@ import { Route } from "@route/route";
 import { upload } from "@service/write";
 import { i18n, I18N_KEY } from "@lang/i18n";
 import { login } from "@service/login";
+import { auth, call, conf, info, keep, play } from "@api/api";
 
 export interface Action {
   get: (url: URL, req: Request) => Promise<Response>;
