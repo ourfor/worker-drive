@@ -4,11 +4,16 @@ export class Cors {
   static readonly grantType: string = 'authorization_code'
   static corsHeaders = {
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET,HEAD,POST,OPTIONS',
+    'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,HEAD,OPTIONS,PATCH,PROPPATCH,PROPFIND,UNLOCK,COPY,LOCK,MOVE',
     'Access-Control-Max-Age': '86400',
     'Access-Control-Allow-Headers': '*',
     'Access-Control-Expose-Headers': '*',
-    'Access-Control-Allow-Credentials': 'true'
+    'Access-Control-Allow-Credentials': 'true',
+    'Allow': 'PROPPATCH,PROPFIND,OPTIONS,DELETE,UNLOCK,COPY,LOCK,MOVE',
+    'Accept-Ranges': 'bytes',
+    'MS-Author-Via': 'DAV',
+    'DAV': '1,2',
+    "Vary": "Origin"
   }
 
   static async get(): Promise<ConfigData> {

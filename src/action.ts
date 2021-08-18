@@ -96,12 +96,12 @@ export class HttpAction implements Action {
       return new Response(null, {
         headers: respHeaders,
       })
-    }
-    else {
+    } else {
       // Handle standard OPTIONS request.
       // If you want to allow other HTTP Methods, you can do that here.
       return new Response(null, {
         headers: {
+          ...Cors.corsHeaders,
           Allow: "GET,HEAD,POST,PROPPATCH,PROPFIND,OPTIONS,DELETE,UNLOCK,COPY,LOCK,MOVE",
         },
       })
