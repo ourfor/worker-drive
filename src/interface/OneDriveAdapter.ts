@@ -6,13 +6,14 @@ import { TOKEN } from "@src/const"
 import { DriveAllData, DriveDataInfo, DriveDataType, HttpMethod, HttpStatus, ResponseContentType } from "@src/enum"
 import { TokenData } from "@type/TokenData"
 import { cookies } from "@util/cookie"
+import { DriveAdapter } from "@src/interface/DriveAdapter"
 
 type WriteResponse = { uploadUrl: string }
 
 const API_PREFIX = "https://graph.microsoft.com/v1.0"
 
 
-class OneDriveAdapter implements DriveAdapter {
+export class OneDriveAdapter implements DriveAdapter {
     async auth(): Promise<string | null> {
         const json = await STORE.get('auth')
         if (json) {
@@ -28,7 +29,7 @@ class OneDriveAdapter implements DriveAdapter {
      * 
      * @see https://docs.microsoft.com/en-us/graph/api/driveitem-post-children?view=graph-rest-1.0&tabs=http
      */
-    async mkdir(path: string, request: Request): Promise<Response> {
+    async mkdir(path: string, request: Request, contentType?: ResponseContentType): Promise<Response> {
         return new Response()
     }
 
@@ -39,7 +40,7 @@ class OneDriveAdapter implements DriveAdapter {
      * 
      * @see https://docs.microsoft.com/en-us/graph/api/driveitem-copy?view=graph-rest-1.0&tabs=http
      */
-    async delete(path: string, request: Request): Promise<Response> {
+    async delete(path: string, request: Request, contentType?: ResponseContentType): Promise<Response> {
         return new Response()
     }
 
@@ -52,7 +53,7 @@ class OneDriveAdapter implements DriveAdapter {
      * 
      * @see https://docs.microsoft.com/en-us/graph/api/driveitem-search?view=graph-rest-1.0&tabs=http
      */
-    async search(path: string, name: string, request: Request): Promise<Response> {
+    async search(path: string, name: string, request: Request, contentType?: ResponseContentType): Promise<Response> {
         const authorization = await this.auth()
         if (!authorization) {
             throw new Error(HttpStatus.UNAUTHORIZED.toLocaleString())
@@ -69,7 +70,7 @@ class OneDriveAdapter implements DriveAdapter {
      * 
      * @see https://docs.microsoft.com/en-us/graph/api/driveitem-move?view=graph-rest-1.0&tabs=http
      */
-    async move(source: string, destination: string, request: Request): Promise<Response> {
+    async move(source: string, destination: string, request: Request, contentType?: ResponseContentType): Promise<Response> {
         return new Response()
     }
 
@@ -81,7 +82,7 @@ class OneDriveAdapter implements DriveAdapter {
      * 
      * @see https://docs.microsoft.com/en-us/graph/api/driveitem-copy?view=graph-rest-1.0&tabs=http
      */
-    async copy(source: string, destination: string, request: Request): Promise<Response> {
+    async copy(source: string, destination: string, request: Request, contentType?: ResponseContentType): Promise<Response> {
         return new Response()
     }
 
@@ -94,7 +95,7 @@ class OneDriveAdapter implements DriveAdapter {
      * 
      * @see https://docs.microsoft.com/en-us/graph/api/driveitem-get-content?view=graph-rest-1.0&tabs=http
      */
-    async read(path: string, req: Request, isRoot?: boolean): Promise<Response> {
+    async read(path: string, req: Request, contentType?: ResponseContentType, isRoot?: boolean): Promise<Response> {
         const url = `${API_PREFIX}/me/drive/root${isRoot ? `/children` : `:${path}`}`
         const authorization = await this.auth()
         let result
@@ -128,7 +129,7 @@ class OneDriveAdapter implements DriveAdapter {
                     case DriveDataType.FOLDER: {
                         try {
                             if(TOKEN.VALUE == cookies(req, TOKEN.KEY)) {
-                                result = this.read(`${path}:/children`, req)
+                                result = this.read(`${path}:/children`, req, contentType)
                             } else {
                                 throw new Error(i18n(I18N_KEY.PERMISSION_DENY))
                             }
@@ -141,9 +142,10 @@ class OneDriveAdapter implements DriveAdapter {
                         const { value: items } = data;
                         const href = path.replace(':/children','')                    
                         const props = { data: items, href: href === "/" ? "" : href }
-                        result = new Response(render(FileList(props)),{
+                        const body = contentType == ResponseContentType.JSON ? JSON.stringify(props) : render(FileList(props))
+                        result = new Response(body, {
                             headers: {
-                                'content-type': ResponseContentType.HTML
+                                'content-type': contentType ?? ResponseContentType.HTML
                             }
                         })
                         break;
@@ -152,7 +154,7 @@ class OneDriveAdapter implements DriveAdapter {
                         if(path.endsWith('/')) {
                             if(TOKEN.VALUE === cookies(req, TOKEN.KEY)) {
                                 if (path === "/") {
-                                    result = this.read('/', req, true)
+                                    result = this.read('/', req, contentType, true)
                                 } else {
                                     result = this.read(path+':/children', req)
                                 }
@@ -183,7 +185,7 @@ class OneDriveAdapter implements DriveAdapter {
      * 
      * @see https://docs.microsoft.com/en-us/graph/api/driveitem-put-content?view=graph-rest-1.0&tabs=http
      */
-    async write(path: string, req: Request): Promise<Response> {
+    async write(path: string, req: Request, contentType?: ResponseContentType): Promise<Response> {
         const url = new URL(`${API_PREFIX}/me/drive/root:${path}:/createUploadSession`);
         try {
             if(TOKEN.VALUE == cookies(req, TOKEN.KEY)) {
@@ -217,4 +219,8 @@ class OneDriveAdapter implements DriveAdapter {
     }
 }
 
-export const drive = new OneDriveAdapter()
+const onedrive = new OneDriveAdapter()
+
+export {
+    onedrive
+}

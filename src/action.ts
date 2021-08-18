@@ -1,5 +1,5 @@
 import { Cors } from "@config/Cors";
-import { HttpStatus } from "@src/enum";
+import { HttpStatus, ResponseContentType } from "@src/enum";
 import { Route } from "@route/route";
 import { i18n, I18N_KEY } from "@lang/i18n";
 
@@ -21,7 +21,8 @@ export class HttpAction implements Action {
         result = new Response(i18n(I18N_KEY.NOT_FOUND), { status: HttpStatus.NOT_FOUND })
       }
     } else {
-      result = drive.read(pathname, req)
+      const type = url.searchParams.get("accept") === "json" ? ResponseContentType.JSON : ResponseContentType.HTML
+      result = drive.read(pathname, req, type)
     }
     return result
   }
