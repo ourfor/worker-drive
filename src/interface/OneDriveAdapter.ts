@@ -3,10 +3,11 @@ import { i18n, I18N_KEY } from "@lang/i18n"
 import { render } from "@page/render"
 import { FileList } from "@page/FileList"
 import { TOKEN } from "@src/const"
-import { DriveAllData, DriveDataInfo, DriveDataType, HttpMethod, HttpStatus, ResponseContentType } from "@src/enum"
+import { DriveAllData, DriveDataInfo, DriveDataType, DriveFileData, HttpMethod, HttpStatus, ResponseContentType } from "@src/enum"
 import { TokenData } from "@type/TokenData"
 import { cookies } from "@util/cookie"
 import { DriveAdapter } from "@src/interface/DriveAdapter"
+import { WebDAV } from "@type/XML"
 
 type WriteResponse = { uploadUrl: string }
 
@@ -142,7 +143,36 @@ export class OneDriveAdapter implements DriveAdapter {
                         const { value: items } = data;
                         const href = path.replace(':/children','')                    
                         const props = { data: items, href: href === "/" ? "" : href }
-                        const body = contentType == ResponseContentType.JSON ? JSON.stringify(props) : render(FileList(props))
+                        let body;
+                        switch (contentType) {
+                            case ResponseContentType.JSON: {
+                                body = JSON.stringify(props)
+                                break;
+                            }
+                            case ResponseContentType.HTML: {
+                                body = render(FileList(props))
+                                break;
+                            }
+                            case ResponseContentType.XML: {
+                                const status = "HTTP/1.1 200 OK"
+                                const data: WebDAV.XML = {
+                                    multistatus: {
+                                        response: props.data.map((item) => WebDAV.createXMLResponse({
+                                            href: `${path}/${item.name}`,
+                                            length: item.size,
+                                            status,
+                                            createAt: (item as DriveFileData).createdDateTime!.toString(),
+                                            updateAt: (item as DriveFileData).createdDateTime!.toString(),
+                                            type: (item as DriveFileData).type,
+                                            name: item.name,
+                                            etag: item.name
+                                        }))
+                                    }
+                                }
+                                body = WebDAV.js2xml(data)
+                                break;
+                            }
+                        }
                         result = new Response(body, {
                             headers: {
                                 'content-type': contentType ?? ResponseContentType.HTML

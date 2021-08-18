@@ -14,7 +14,7 @@ export async function auth(): Promise<Response> {
 
     const location = url.href;
     return new Response('redirect to onedrive login', {
-        status: HttpStatus.REDIRECT,
+        status: HttpStatus.Redirect,
         headers: {
             location,
         },

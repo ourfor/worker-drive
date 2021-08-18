@@ -19,6 +19,7 @@ export enum HttpMethod {
     UNLOCK = 'UNLOCK'
 }
 
+
 export enum HttpStatus {
     Not_Found = 404,
     Redirect = 302,
@@ -35,7 +36,8 @@ export enum HttpStatus {
 
 export enum ResponseContentType {
     HTML = "text/html; charset=utf-8",
-    JSON = "application/json; charset=utf-8"
+    JSON = "application/json; charset=utf-8",
+    XML = "text/xml; charset=utf-8"
 }
 
 export enum DriveAuthType {

@@ -18,10 +18,18 @@ export class HttpAction implements Action {
       if (callback) {
         result = callback(req)
       } else {
-        result = new Response(i18n(I18N_KEY.NOT_FOUND), { status: HttpStatus.NOT_FOUND })
+        result = new Response(i18n(I18N_KEY.NOT_FOUND), { status: HttpStatus.Not_Found })
       }
     } else {
-      const type = url.searchParams.get("accept") === "json" ? ResponseContentType.JSON : ResponseContentType.HTML
+      const accept = url.searchParams.get("accept")
+      let type
+      if (!accept || accept == "") {
+        type = ResponseContentType.HTML
+      } else if (accept == "json") {
+        type = ResponseContentType.JSON
+      } else {
+        type = ResponseContentType.XML
+      }
       result = drive.read(pathname, req, type)
     }
     return result

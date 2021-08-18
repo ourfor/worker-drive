@@ -23,7 +23,11 @@ module.exports = {
       "@style": path.resolve(__dirname, "./src/style"),
       "@lang": path.resolve(__dirname, "./src/lang"),
       "@src": path.resolve(__dirname, "./src")
-		}
+		},
+    fallback: {
+      stream: false,
+      string_decoder: false
+    }
   },
   module: {
     rules: [
