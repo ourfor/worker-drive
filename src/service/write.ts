@@ -4,8 +4,8 @@ import { i18n, I18N_KEY } from "@lang/i18n";
 import { cookies } from "@util/cookie";
 import { TOKEN } from "@src/const";
 
-type UploadResponse = { uploadUrl: string }
-export async function upload(path: string, req: Request): Promise<Response> {
+type WriteResponse = { uploadUrl: string }
+export async function write(path: string, req: Request): Promise<Response> {
     const url = new URL(`https://graph.microsoft.com/v1.0/me/drive/root:${path}:/createUploadSession`);
     try {
         if(TOKEN.VALUE == cookies(req, TOKEN.KEY)) {
@@ -17,7 +17,7 @@ export async function upload(path: string, req: Request): Promise<Response> {
                     method: HttpMethod.POST,
                     headers: { authorization }
                 })
-                const data: UploadResponse = await res.json();
+                const data: WriteResponse = await res.json();
                 const { body, headers } = req
                 return fetch(data.uploadUrl, {
                     body,
