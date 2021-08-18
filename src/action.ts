@@ -7,9 +7,14 @@ export interface Action {
   get: (url: URL, req: Request) => Promise<Response>;
   post: (url: URL, req: Request) => Promise<Response>;
   options: (url: URL, req: Request) => Promise<Response>;
+  propfind: (url: URL, req: Request) => Promise<Response>;
 }
 
 export class HttpAction implements Action {
+  async propfind(url: URL, req: Request) {
+    return drive.read(url.pathname, req, ResponseContentType.XML)
+  }
+
   async get(url: URL, req: Request) {
     let result;
     const pathname = url.pathname
@@ -74,7 +79,7 @@ export class HttpAction implements Action {
       // If you want to allow other HTTP Methods, you can do that here.
       return new Response(null, {
         headers: {
-          Allow: "GET, HEAD, POST, OPTIONS",
+          Allow: "GET,HEAD,POST,PROPPATCH,PROPFIND,OPTIONS,DELETE,UNLOCK,COPY,LOCK,MOVE",
         },
       })
     }

@@ -35,9 +35,9 @@ export enum HttpStatus {
 }
 
 export enum ResponseContentType {
-    HTML = "text/html; charset=utf-8",
-    JSON = "application/json; charset=utf-8",
-    XML = "text/xml; charset=utf-8"
+    HTML = "text/html;charset=utf-8",
+    JSON = "application/json;charset=utf-8",
+    XML = "application/xml;charset=utf-8"
 }
 
 export enum DriveAuthType {
@@ -55,8 +55,11 @@ export const enum DriveDataType {
 export interface DriveFileData {
     type: DriveDataType.FILE
     name: string,
+    eTag: string,
+    cTag: string,
     size: number
-    createdDateTime?: string
+    createdDateTime?: string,
+    lastModifiedDateTime?: string,
     '@microsoft.graph.downloadUrl': string
     file: {
         mimeType: string

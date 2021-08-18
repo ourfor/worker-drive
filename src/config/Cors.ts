@@ -32,10 +32,13 @@ export class Cors {
     headers.set('Access-Control-Allow-Origin', origin ? origin : "*")
     headers.set('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,HEAD,OPTIONS,PATCH')
     headers.set('Access-Control-Allow-Headers', 'Origin,Accept,Content-Type,Authorization,Range,Accept-Ranges')
-    headers.set('Access-Control-Expose-Headers', '*')
+    headers.set('Access-Control-Expose-Headers', 'DAV, Content-Length, Allow')
     headers.set('Access-Control-Allow-Credentials', 'true')
+    headers.set('Allow', 'PROPPATCH,PROPFIND,OPTIONS,DELETE,UNLOCK,COPY,LOCK,MOVE')
     headers.set('Access-Control-Max-Age', '86400')
     headers.set('Accept-Ranges', 'bytes')
+    headers.set('MS-Author-Via', 'DAV')
+    headers.set('DAV', '1,2')
     headers.set("Vary", "Origin")
     return headers
   }

@@ -46,18 +46,27 @@ export namespace WebDAV {
         propstat: PropStat
     }
 
+    export const attributes = {
+        "xmlns:D": "DAV:"
+    }
     export type MultiStatus = {
-        _attributes?: {
-            "xmlns:D": "DAV:"
+        _attributes: {
+            "xmlns:D": string
         },
         response: Response[]
     }
 
+    export const declaration = {
+        _attributes: {
+            version: "1.0",
+            encoding: "utf-8"
+        }
+    }
     export type XML = {
         _declaration?: {
             _attributes: {
-                version: "1.0",
-                encoding: "utf-8"
+                version: string,
+                encoding: string
             }
         },
         multistatus: MultiStatus

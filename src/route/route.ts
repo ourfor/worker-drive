@@ -9,6 +9,7 @@ import { login } from "@service/login"
 import { play } from "@api/play"
 
 type HttpCallback = (request: Request) => Promise<Response>
+type HttpMethodCallback = (url: URL, req: Request) => Promise<Response>
 
 export class Route {
   static authReg = /\/__(auth|call|conf|keep|info)__$/
@@ -36,6 +37,8 @@ export class Route {
       result = action.post(url,req)
     } else if (method == HttpMethod.OPTIONS) {
       result = action.options(url,req)
+    } else if (method == HttpMethod.PROPFIND) {
+      result = action.propfind(url, req)
     } else {
       result = new Response(method)
     }

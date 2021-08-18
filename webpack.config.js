@@ -1,4 +1,5 @@
 const path = require('path')
+const { Stream } = require('stream')
 const mode = process.env.NODE_ENV || 'production'
 
 module.exports = {
@@ -9,6 +10,10 @@ module.exports = {
   },
   devtool: 'cheap-module-source-map',
   mode,
+  externals: [
+    'stream',
+    'string_decoder'
+  ],
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
     alias: {
@@ -23,11 +28,7 @@ module.exports = {
       "@style": path.resolve(__dirname, "./src/style"),
       "@lang": path.resolve(__dirname, "./src/lang"),
       "@src": path.resolve(__dirname, "./src")
-		},
-    fallback: {
-      stream: false,
-      string_decoder: false
-    }
+		}
   },
   module: {
     rules: [

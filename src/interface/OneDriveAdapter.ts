@@ -155,17 +155,22 @@ export class OneDriveAdapter implements DriveAdapter {
                             }
                             case ResponseContentType.XML: {
                                 const status = "HTTP/1.1 200 OK"
+                                const origin = new URL(req.url).origin
+                                const base = origin + path
+                                const items: DriveFileData[] = props.data as DriveFileData[]
                                 const data: WebDAV.XML = {
+                                    _declaration: WebDAV.declaration,
                                     multistatus: {
-                                        response: props.data.map((item) => WebDAV.createXMLResponse({
-                                            href: `${path}/${item.name}`,
+                                        _attributes: WebDAV.attributes,
+                                        response: items.map((item) => WebDAV.createXMLResponse({
+                                            href: `${base}${item.name}`,
                                             length: item.size,
                                             status,
-                                            createAt: (item as DriveFileData).createdDateTime!.toString(),
-                                            updateAt: (item as DriveFileData).createdDateTime!.toString(),
-                                            type: (item as DriveFileData).type,
+                                            createAt: item.createdDateTime ?? "",
+                                            updateAt: item.createdDateTime ?? "",
+                                            type: item.type,
                                             name: item.name,
-                                            etag: item.name
+                                            etag: item.eTag
                                         }))
                                     }
                                 }
