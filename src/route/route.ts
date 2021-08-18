@@ -1,32 +1,31 @@
+import { auth } from "@api/auth"
+import { info } from "@api/info"
+import { call } from "@api/call"
 import { Action } from "@src/action"
 import { HttpMethod } from "@src/enum"
+import { conf } from "@api/conf"
+import { keep } from "@api/keep"
+import { login } from "@service/login"
+import { play } from "@api/play"
+
+type HttpCallback = (request: Request) => Promise<Response>
 
 export class Route {
   static authReg = /\/__(auth|call|conf|keep|info)__$/
+  static map: {[key: string]: (HttpCallback | undefined)} = {
+    "/__info__": info,
+    "/__auth__": auth,
+    "/__call__": call,
+    "/__conf__": conf,
+    "/__keep__": keep,
+    "/__login__": login,
+    "/__play__": play
+  }
+
   static match(url: URL): boolean {
     return Route.authReg.test(url.pathname)
   }
-  static isInfo(url: URL): boolean {
-    return '/__info__' == url.pathname
-  }
-  static isAuth(url: URL): boolean {
-    return '/__auth__' == url.pathname
-  }
-  static isCall(url: URL): boolean {
-    return '/__call__' == url.pathname
-  }
-  static isConf(url: URL): boolean {
-    return '/__conf__' == url.pathname
-  }
-  static isKeep(url: URL): boolean {
-    return '/__keep__' == url.pathname
-  }
-  static isLogin(url: URL): boolean {
-    return '/__login__' == url.pathname
-  }
-  static isPlay(url: URL): boolean {
-    return '/__play__' == url.pathname
-  }
+
   static async dispatch(req: Request, action: Action): Promise<Response> {
     const { method } = req
     const url = new URL(req.url)

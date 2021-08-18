@@ -2,8 +2,6 @@ import { Cors } from "@config/Cors";
 import { HttpStatus } from "@src/enum";
 import { Route } from "@route/route";
 import { i18n, I18N_KEY } from "@lang/i18n";
-import { login } from "@service/login";
-import { auth, call, conf, info, keep, play } from "@api/api";
 
 export interface Action {
   get: (url: URL, req: Request) => Promise<Response>;
@@ -14,34 +12,26 @@ export interface Action {
 export class HttpAction implements Action {
   async get(url: URL, req: Request) {
     let result;
-    if (url.pathname.startsWith("/__")) {
-      if (Route.isAuth(url)) {
-        result = auth()
-      } else if (Route.isCall(url)) {
-        result = call(url)
-      } else if (Route.isKeep(url)) {
-        result = keep(req)
-      } else if (Route.isInfo(url)) {
-        result = info()
-      } else if (Route.isPlay(url)) {
-        result = play(req)
-      } else if (Route.isLogin(url)) {
-        result = login()
+    const pathname = url.pathname
+    if (pathname.startsWith("/__")) {
+      const callback = Route.map[pathname]
+      if (callback) {
+        result = callback(req)
       } else {
         result = new Response(i18n(I18N_KEY.NOT_FOUND), { status: HttpStatus.NOT_FOUND })
       }
     } else {
-      result = drive.read(url.pathname, req)
+      result = drive.read(pathname, req)
     }
     return result
   }
 
   async post(url: URL, req: Request) {
+    const pathname = url.pathname
+    const callback = Route.map[pathname]
     let result;
-    if (Route.isConf(url)) {
-      result = conf(req)
-    } else if (Route.isKeep(url)) {
-        result = keep(req)
+    if (callback) {
+      result = callback(req)
     } else {
       result = drive.write(url.pathname, req);
     }
@@ -54,7 +44,7 @@ export class HttpAction implements Action {
       headers.get("Origin") !== null &&
       headers.get("Access-Control-Request-Method") !== null &&
       headers.get("Access-Control-Request-Headers") !== null
-    ){
+    ) {
       // Handle CORS pre-flight request.
       // If you want to check or reject the requested method + headers
       // you can do that here.

@@ -4,7 +4,8 @@ import { TokenData } from "@type/TokenData";
 import { i18n, I18N_KEY } from "@lang/i18n";
 
 
-export async function call(url: URL): Promise<Response> {
+export async function call(request: Request): Promise<Response> {
+    const url = new URL(request.url)
     const code = url.searchParams.get('code')!;
     const link = new URL(CONST_URL.TOKEN);
     const params = new URLSearchParams();
