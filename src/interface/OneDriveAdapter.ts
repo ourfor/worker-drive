@@ -179,6 +179,7 @@ export class OneDriveAdapter implements DriveAdapter {
                             }
                         }
                         result = new Response(body, {
+                            status: contentType == ResponseContentType.XML ? HttpStatus.Multi_Status : HttpStatus.Ok,
                             headers: {
                                 'content-type': contentType ?? ResponseContentType.HTML
                             }

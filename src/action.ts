@@ -1,7 +1,9 @@
 import { Cors } from "@config/Cors";
-import { HttpStatus, ResponseContentType } from "@src/enum";
+import { HttpMethod, HttpStatus, ResponseContentType } from "@src/enum";
 import { Route } from "@route/route";
 import { i18n, I18N_KEY } from "@lang/i18n";
+import { basicAuthentication, verifyCredentials } from "@util/basicAuth";
+import { TOKEN } from "./const";
 
 export interface Action {
   get: (url: URL, req: Request) => Promise<Response>;
@@ -11,8 +13,29 @@ export interface Action {
 }
 
 export class HttpAction implements Action {
+
   async propfind(url: URL, req: Request) {
-    return drive.read(url.pathname, req, ResponseContentType.XML)
+          // The "Authorization" header is sent when authenticated.
+          if (req.headers.has('Authorization')) {
+            // Throws exception when authorization fails.
+            const { username, password } = basicAuthentication(req)
+            verifyCredentials(username, password)
+    
+            // Only returns this response when no exception is thrown.
+            const newReq = new Request(req, { method: HttpMethod.GET, headers: {
+              cookie: `${TOKEN.KEY}=${TOKEN.VALUE}`
+            }})
+            return drive.read(url.pathname, newReq, ResponseContentType.XML)
+          }
+    
+          // Not authenticated.
+          return new Response('You need to login.', {
+            status: 401,
+            headers: {
+              // Prompts the user for credentials.
+              'WWW-Authenticate': 'Basic realm="my scope", charset="UTF-8"'
+            }
+          })
   }
 
   async get(url: URL, req: Request) {
@@ -67,7 +90,7 @@ export class HttpAction implements Action {
         ...Cors.corsHeaders,
       // Allow all future content Request headers to go back to browser
       // such as Authorization (Bearer) or X-Client-Name-Version
-        "Access-Control-Allow-Headers": allowHeaders?allowHeaders:"*"
+        "Access-Control-Allow-Headers": allowHeaders ? allowHeaders : "*"
       }
   
       return new Response(null, {
