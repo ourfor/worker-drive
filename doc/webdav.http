@@ -1,0 +1,2 @@
+PROPFIND http://localhost:9988/
+Authorization: Basic d2ViZGF2LXVzZXI6cGEkJHcwcmQh

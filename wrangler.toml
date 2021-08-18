@@ -1,19 +1,19 @@
-name = "drive-hi"
+name = "drive"
 type = "javascript"
 account_id = "c04380e1591f31dd7c42f710541dd5d6"
 workers_dev = true
-#routes = [
-#   "drive-hi.tellkeep.ml/*",
-#   "cloud-hi.tellkeep.ml/*"
-#]
+routes = [
+   "drive.tellkeep.ml/*",
+   "cloud.tellkeep.ml/*"
+]
 zone_id = "ec1677e19b1b70e68d591fa5b8c5aa57"
 webpack_config = "webpack.config.js"
 
 kv_namespaces = [
    # store
-   #{ binding = "STORE", id = "c1bd122c4a5443cd9e3c0321661a3293", preview_id = "c1bd122c4a5443cd9e3c0321661a3293" },
+   { binding = "STORE", id = "c1bd122c4a5443cd9e3c0321661a3293", preview_id = "c1bd122c4a5443cd9e3c0321661a3293" },
    # store-hi
-   { binding = "STORE", id = "8f0483c091144566b7646868397da947", preview_id = "8f0483c091144566b7646868397da947" },
+   #{ binding = "STORE", id = "8f0483c091144566b7646868397da947", preview_id = "8f0483c091144566b7646868397da947" },
 ]
 
 [build]

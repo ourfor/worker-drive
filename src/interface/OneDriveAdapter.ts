@@ -56,7 +56,7 @@ export class OneDriveAdapter implements DriveAdapter {
     async search(path: string, name: string, request: Request, contentType?: ResponseContentType): Promise<Response> {
         const authorization = await this.auth()
         if (!authorization) {
-            throw new Error(HttpStatus.UNAUTHORIZED.toLocaleString())
+            throw new Error(HttpStatus.Unauthorized.toLocaleString())
         }
         const url = `${API_PREFIX}/me/drive/root/search(q='${name}')`
         return new Response()
@@ -208,7 +208,7 @@ export class OneDriveAdapter implements DriveAdapter {
                     })
                 } else {
                     return new Response(i18n(I18N_KEY.NEED_LOGIN_TO_UPLOAD),{
-                        status: HttpStatus.UNAUTHORIZED
+                        status: HttpStatus.Unauthorized
                     })
                 }
             }

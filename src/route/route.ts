@@ -37,7 +37,7 @@ export class Route {
     } else if (method == HttpMethod.OPTIONS) {
       result = action.options(url,req)
     } else {
-      result = new Response()
+      result = new Response(method)
     }
     return result
   }

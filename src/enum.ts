@@ -7,14 +7,30 @@ export enum HttpMethod {
     HEAD = 'HEAD',
     DELETE = 'DELETE',
     TRACE = 'TRACE',
-    CONNECT = 'CONNECT'
+    CONNECT = 'CONNECT',
+
+    // WEBDAV
+    PROPFIND = 'PROPFIND',
+    PROPPATCH = 'PROPPATCH',
+    MKCOL = 'MKCOL',
+    COPY = 'COPY',
+    MOVE = 'MOVE',
+    LOCK = 'LOCK',
+    UNLOCK = 'UNLOCK'
 }
 
 export enum HttpStatus {
-    NOT_FOUND = 404,
-    REDIRECT = 302,
-    UNAUTHORIZED = 401,
-    OK = 200
+    Not_Found = 404,
+    Redirect = 302,
+    Unauthorized = 401,
+    Ok = 200,
+    Multi_Status = 207,
+    Unprocessable_Entity = 422,
+    Locked = 423,
+    Failed_Dependency = 424,
+    Insufficient_Storage = 507,
+    Precondition_Failed = 412,
+    Request_URI_Too_Long = 414
 }
 
 export enum ResponseContentType {
