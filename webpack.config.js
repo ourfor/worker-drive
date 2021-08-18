@@ -29,11 +29,10 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        loader: 'ts-loader',
-        options: {
-          // transpileOnly is useful to skip typescript checks occasionally:
-          // transpileOnly: true,
-        },
+        use: [
+          'babel-loader',
+          'ts-loader'
+        ]
       },
     ],
   },

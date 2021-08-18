@@ -9,14 +9,96 @@ import { cookies } from "@util/cookie"
 
 type WriteResponse = { uploadUrl: string }
 
+const API_PREFIX = "https://graph.microsoft.com/v1.0"
+
+
 class OneDriveAdapter implements DriveAdapter {
-    async read(path: string, req: Request, isRoot?: boolean): Promise<Response> {
-        const url = `https://graph.microsoft.com/v1.0/me/drive/root${isRoot ? `/children` : `:${path}`}`
+    async auth(): Promise<string | null> {
         const json = await STORE.get('auth')
-        let result
         if (json) {
             const token: TokenData = JSON.parse(json)
-            const authorization = `${token.token_type} ${token.access_token}`
+            return `${token.token_type} ${token.access_token}`
+        }
+        return null
+    }
+    /**
+     * 
+     * @param path 
+     * @param request 
+     * 
+     * @see https://docs.microsoft.com/en-us/graph/api/driveitem-post-children?view=graph-rest-1.0&tabs=http
+     */
+    async mkdir(path: string, request: Request): Promise<Response> {
+        return new Response()
+    }
+
+    /**
+     * 
+     * @param path 
+     * @param request 
+     * 
+     * @see https://docs.microsoft.com/en-us/graph/api/driveitem-copy?view=graph-rest-1.0&tabs=http
+     */
+    async delete(path: string, request: Request): Promise<Response> {
+        return new Response()
+    }
+
+    /**
+     * 
+     * @param path 
+     * @param name 
+     * @param request 
+     * @returns 
+     * 
+     * @see https://docs.microsoft.com/en-us/graph/api/driveitem-search?view=graph-rest-1.0&tabs=http
+     */
+    async search(path: string, name: string, request: Request): Promise<Response> {
+        const authorization = await this.auth()
+        if (!authorization) {
+            throw new Error(HttpStatus.UNAUTHORIZED.toLocaleString())
+        }
+        const url = `${API_PREFIX}/me/drive/root/search(q='${name}')`
+        return new Response()
+    }
+
+    /**
+     * 
+     * @param source 
+     * @param destination 
+     * @param request 
+     * 
+     * @see https://docs.microsoft.com/en-us/graph/api/driveitem-move?view=graph-rest-1.0&tabs=http
+     */
+    async move(source: string, destination: string, request: Request): Promise<Response> {
+        return new Response()
+    }
+
+    /**
+     * 
+     * @param source 
+     * @param destination 
+     * @param request 
+     * 
+     * @see https://docs.microsoft.com/en-us/graph/api/driveitem-copy?view=graph-rest-1.0&tabs=http
+     */
+    async copy(source: string, destination: string, request: Request): Promise<Response> {
+        return new Response()
+    }
+
+    /**
+     * 
+     * @param path 
+     * @param req 
+     * @param isRoot 
+     * @returns 
+     * 
+     * @see https://docs.microsoft.com/en-us/graph/api/driveitem-get-content?view=graph-rest-1.0&tabs=http
+     */
+    async read(path: string, req: Request, isRoot?: boolean): Promise<Response> {
+        const url = `${API_PREFIX}/me/drive/root${isRoot ? `/children` : `:${path}`}`
+        const authorization = await this.auth()
+        let result
+        if (authorization) {
             try {
                 const request = new Request(url, req)
                 const headers = request.headers
@@ -93,14 +175,20 @@ class OneDriveAdapter implements DriveAdapter {
         return result
     }
     
+    /**
+     * 
+     * @param path 
+     * @param req 
+     * @returns 
+     * 
+     * @see https://docs.microsoft.com/en-us/graph/api/driveitem-put-content?view=graph-rest-1.0&tabs=http
+     */
     async write(path: string, req: Request): Promise<Response> {
-        const url = new URL(`https://graph.microsoft.com/v1.0/me/drive/root:${path}:/createUploadSession`);
+        const url = new URL(`${API_PREFIX}/me/drive/root:${path}:/createUploadSession`);
         try {
             if(TOKEN.VALUE == cookies(req, TOKEN.KEY)) {
-                const json = await STORE.get('auth')
-                if (json) {
-                    const token: TokenData = JSON.parse(json)
-                    const authorization = `${token.token_type} ${token.access_token}`
+                const authorization = await this.auth()
+                if (authorization) {
                     const res = await fetch(url.href, {
                         method: HttpMethod.POST,
                         headers: { authorization }
@@ -128,3 +216,5 @@ class OneDriveAdapter implements DriveAdapter {
         }
     }
 }
+
+export const drive = new OneDriveAdapter()

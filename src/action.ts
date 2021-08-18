@@ -1,8 +1,6 @@
 import { Cors } from "@config/Cors";
 import { HttpStatus } from "@src/enum";
-import { read } from "@service/read";
 import { Route } from "@route/route";
-import { write } from "@service/write";
 import { i18n, I18N_KEY } from "@lang/i18n";
 import { login } from "@service/login";
 import { auth, call, conf, info, keep, play } from "@api/api";
@@ -33,7 +31,7 @@ export class HttpAction implements Action {
         result = new Response(i18n(I18N_KEY.NOT_FOUND), { status: HttpStatus.NOT_FOUND })
       }
     } else {
-      result = read(url.pathname, req)
+      result = drive.read(url.pathname, req)
     }
     return result
   }
@@ -45,7 +43,7 @@ export class HttpAction implements Action {
     } else if (Route.isKeep(url)) {
         result = keep(req)
     } else {
-      result = write(url.pathname, req);
+      result = drive.write(url.pathname, req);
     }
     return result
   }
