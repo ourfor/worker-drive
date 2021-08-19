@@ -24,26 +24,32 @@ export namespace WebDAV {
     }
 
     export type Prop = {
-        getlastmodified: string | Date | null,
-        lockdiscovery: {} | null,
-        supportedlock: SupportedLock | null,
-        creationdate: string | Date | null,
-        resourcetype: ResourceType | null,
-        displayname: string | null,
-        getetag: string,
+        getlastmodified?: string | Date | null,
+        lockdiscovery?: {} | null,
+        supportedlock?: SupportedLock | null,
+        creationdate?: string | Date | null,
+        resourcetype?: ResourceType | null,
+        displayname?: string | null,
+        getetag?: string,
         getcontentlength?: number | null,
         getcontenttype?: string | null
     }
 
     export type PropStat = {
         status: string,
-        prop: Prop
+        prop: Prop | Prop[]
     }
 
+    export type PropFind = {
+        _attributes: {
+            "xmlns:D": string
+        },
+        prop?: Prop
+    }
 
     export type Response = {
         href: string,
-        propstat: PropStat
+        propstat: PropStat | PropStat[]
     }
 
     export const attributes = {
@@ -77,10 +83,10 @@ export namespace WebDAV {
         status: string,
         updateAt: string,
         createAt: string,
-        name: string,
-        etag: string,
-        length: number | null,
-        type: string | null
+        name?: string,
+        etag?: string,
+        length?: number | null,
+        type?: string | null
     }
     export function createXMLResponse({
         href,
@@ -94,38 +100,26 @@ export namespace WebDAV {
     }: ResponseData): Response {
         return {
             href,
-            propstat: {
+            propstat: [{
                 status,
                 prop: {
                     getlastmodified: updateAt,
                     creationdate: createAt,
-                    displayname: name,
-                    getetag: etag,
-                    lockdiscovery: null,
-                    getcontentlength: length,
-                    getcontenttype: type,
-                    resourcetype: null,
-                    supportedlock: {
-                        lockentry: [
-                            {
-                                lockscope: {
-                                    exclusive: null
-                                },
-                                locktype: {
-                                    write: null
-                                }
-                            }, {
-                                lockscope: {
-                                    shared: null
-                                },
-                                locktype: {
-                                    write: null
-                                }
-                            }
-                        ]
-                    }
+                    // displayname: name,
+                    // getetag: etag,
+                    // lockdiscovery: null,
+                    // getcontentlength: length,
+                    // getcontenttype: type,
+                    resourcetype: {
+                        collection: null
+                    },
                 }
-            }
+            }, {
+                status: 'HTTP/1.1 404 Not Found',
+                prop: {
+                    getcontentlength: null
+                }
+            }]
         }
     }
 
@@ -137,5 +131,15 @@ export namespace WebDAV {
             elementNameFn: (name: string) => "D:" + name
         }
         return convert.js2xml(data, options)
+    }
+
+    export function xml2js<T>(data: string): T {
+        const prefixLength = "D:".length
+        const options = {
+            compact: true,
+            spaces: 4,
+            elementNameFn: (name: string) => name.substring(prefixLength)
+        }
+        return convert.xml2js(data, options) as T
     }
 }

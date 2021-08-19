@@ -4,6 +4,7 @@ import { Route } from "@route/route";
 import { i18n, I18N_KEY } from "@lang/i18n";
 import { basicAuthentication, verifyCredentials } from "@util/basicAuth";
 import { TOKEN } from "./const";
+import { WebDAV } from "@type/XML";
 
 export interface Action {
   get: (url: URL, req: Request) => Promise<Response>;
@@ -21,9 +22,35 @@ export class HttpAction implements Action {
             const { username, password } = basicAuthentication(req)
             verifyCredentials(username, password)
     
+            if (req.headers.get("Content-Type") && req.headers.get("Depth") === "0") {
+              const xml = await req.text()
+              const data = WebDAV.xml2js<WebDAV.PropFind>(xml)
+              const content = WebDAV.createXMLResponse({
+                href: "http://localhost/",
+                updateAt: new Date().toISOString(),
+                createAt: new Date().toISOString(),
+                status: "HTTP/1.1 200 OK",
+              })
+              const xmlData: WebDAV.XML = {
+                multistatus: {
+                  _attributes: WebDAV.attributes,
+                  response: [
+                    content
+                  ]
+                }
+              }
+              const wrap = WebDAV.js2xml(xmlData)
+              return new Response(wrap, {
+                status: HttpStatus.Multi_Status,
+                headers: {
+                  ...Cors.corsHeaders,
+                  "Content-Type": ResponseContentType.XML
+                }
+              })
+            }
             // Only returns this response when no exception is thrown.
-            const newReq = new Request(req, { method: HttpMethod.GET, headers: {
-              cookie: `${TOKEN.KEY}=${TOKEN.VALUE}`
+            const newReq = new Request(req, { method: HttpMethod.GET, body: null, headers: {
+              cookie: `${TOKEN.KEY}=${TOKEN.VALUE}`,
             }})
             return drive.read(url.pathname, newReq, ResponseContentType.XML)
           }
