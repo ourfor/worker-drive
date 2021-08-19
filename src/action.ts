@@ -26,7 +26,7 @@ export class HttpAction implements Action {
               const xml = await req.text()
               const data = WebDAV.xml2js<WebDAV.PropFind>(xml)
               const content = WebDAV.createXMLResponse({
-                href: "http://localhost/",
+                href: url.href,
                 updateAt: new Date().toISOString(),
                 createAt: new Date().toISOString(),
                 status: "HTTP/1.1 200 OK",

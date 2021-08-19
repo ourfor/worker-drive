@@ -88,6 +88,13 @@ export namespace WebDAV {
         length?: number | null,
         type?: string | null
     }
+
+    const NotFound: PropStat = {
+        status: "HTTP/1.1 404 Not Found",
+        prop: {
+            getcontentlength: null
+        }
+    }
     export function createXMLResponse({
         href,
         status,
@@ -98,28 +105,38 @@ export namespace WebDAV {
         length,
         type
     }: ResponseData): Response {
-        return {
-            href,
-            propstat: [{
+        let propstat
+        if (length) {
+            propstat = {
                 status,
                 prop: {
                     getlastmodified: updateAt,
                     creationdate: createAt,
-                    // displayname: name,
-                    // getetag: etag,
-                    // lockdiscovery: null,
-                    // getcontentlength: length,
-                    // getcontenttype: type,
+                    displayname: name,
+                    getetag: etag,
+                    lockdiscovery: null,
+                    getcontentlength: length,
+                    getcontenttype: type,
                     resourcetype: {
                         collection: null
                     },
                 }
-            }, {
-                status: 'HTTP/1.1 404 Not Found',
-                prop: {
-                    getcontentlength: null
-                }
-            }]
+            }
+        } else {
+            propstat = [
+                {
+                    status,
+                    prop: {
+                        getlastmodified: updateAt,
+                        creationdate: createAt,
+                    }
+                },
+                NotFound
+            ]
+        }
+        return {
+            href,
+            propstat
         }
     }
 
