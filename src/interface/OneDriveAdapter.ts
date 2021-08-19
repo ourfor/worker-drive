@@ -158,7 +158,7 @@ export class OneDriveAdapter implements DriveAdapter {
                                 const status = "HTTP/1.1 200 OK"
                                 const origin = new URL(req.url).origin
                                 const base = origin + path.replace(":/children", "/")
-                                const items: DriveFileData[] = props.data as DriveFileData[]
+                                const items = props.data
                                 const data: WebDAV.XML = {
                                     _declaration: WebDAV.declaration,
                                     multistatus: {
@@ -171,7 +171,7 @@ export class OneDriveAdapter implements DriveAdapter {
                                             updateAt: item.createdDateTime ?? "",
                                             type: item.type,
                                             name: item.name,
-                                            etag: item.eTag
+                                            etag: item.type == DriveDataType.FILE ? item.eTag : null
                                         }))
                                     }
                                 }

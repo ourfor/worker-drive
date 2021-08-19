@@ -1,3 +1,4 @@
+import { DriveDataType } from '@src/enum'
 import convert from 'xml-js'
 
 export namespace WebDAV {
@@ -84,7 +85,7 @@ export namespace WebDAV {
         updateAt: string,
         createAt: string,
         name?: string,
-        etag?: string,
+        etag?: string | null,
         length?: number | null,
         type?: string | null
     }
@@ -106,7 +107,7 @@ export namespace WebDAV {
         type
     }: ResponseData): Response {
         let propstat
-        if (length) {
+        if (type == DriveDataType.FILE) {
             propstat = {
                 status,
                 prop: {
@@ -129,7 +130,8 @@ export namespace WebDAV {
                         creationdate: createAt,
                         resourcetype: {
                             collection: null
-                        }
+                        },
+                        getcontentlength: length
                     }
                 },
                 NotFound
