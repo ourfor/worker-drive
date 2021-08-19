@@ -97,6 +97,7 @@ export class OneDriveAdapter implements DriveAdapter {
      * @see https://docs.microsoft.com/en-us/graph/api/driveitem-get-content?view=graph-rest-1.0&tabs=http
      */
     async read(path: string, req: Request, contentType?: ResponseContentType, isRoot?: boolean): Promise<Response> {
+        path = path.length !== 1 && path.endsWith("/") ? path.substring(0, path.length - 1) : path
         const url = `${API_PREFIX}/me/drive/root${isRoot ? `/children` : `:${path}`}`
         const authorization = await this.auth()
         let result
@@ -156,7 +157,7 @@ export class OneDriveAdapter implements DriveAdapter {
                             case ResponseContentType.XML: {
                                 const status = "HTTP/1.1 200 OK"
                                 const origin = new URL(req.url).origin
-                                const base = origin + path
+                                const base = origin + path.replace(":/children", "/")
                                 const items: DriveFileData[] = props.data as DriveFileData[]
                                 const data: WebDAV.XML = {
                                     _declaration: WebDAV.declaration,

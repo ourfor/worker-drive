@@ -119,7 +119,7 @@ export namespace WebDAV {
                     getcontenttype: type,
                     resourcetype: {
                         collection: null
-                    },
+                    }
                 }
             }
         } else {
@@ -129,6 +129,9 @@ export namespace WebDAV {
                     prop: {
                         getlastmodified: updateAt,
                         creationdate: createAt,
+                        resourcetype: {
+                            collection: null
+                        }
                     }
                 },
                 NotFound
