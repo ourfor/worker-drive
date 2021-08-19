@@ -169,7 +169,7 @@ export class OneDriveAdapter implements DriveAdapter {
                                             status,
                                             createAt: item.createdDateTime ?? "",
                                             updateAt: item.createdDateTime ?? "",
-                                            type: item.type,
+                                            type: item.hasOwnProperty('file') ? DriveDataType.FILE: DriveDataType.FOLDER,
                                             name: item.name,
                                             etag: item.type == DriveDataType.FILE ? item.eTag : null
                                         }))

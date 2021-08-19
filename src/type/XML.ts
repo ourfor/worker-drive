@@ -31,7 +31,7 @@ export namespace WebDAV {
         creationdate?: string | Date | null,
         resourcetype?: ResourceType | null,
         displayname?: string | null,
-        getetag?: string,
+        getetag?: string | null,
         getcontentlength?: number | null,
         getcontenttype?: string | null
     }
