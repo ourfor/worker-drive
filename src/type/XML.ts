@@ -117,9 +117,7 @@ export namespace WebDAV {
                     lockdiscovery: null,
                     getcontentlength: length,
                     getcontenttype: type,
-                    resourcetype: {
-                        collection: null
-                    }
+                    resourcetype: null
                 }
             }
         } else {
