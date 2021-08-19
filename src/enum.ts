@@ -60,6 +60,7 @@ export interface DriveFileData {
     size: number
     createdDateTime?: string,
     lastModifiedDateTime?: string,
+    webUrl: string,
     '@microsoft.graph.downloadUrl': string
     file: {
         mimeType: string
@@ -86,7 +87,8 @@ export interface DriveErrorData {
 
 export interface DriveItemsData {
     type: DriveDataType.ITEMS
-    value: (DriveFileData|DriveFolderData)[]
+    value: (DriveFileData|DriveFolderData)[],
+    '@odata.nextLink': string
 }
 
 export class DriveDataInfo {

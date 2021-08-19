@@ -72,6 +72,13 @@ export class HttpAction implements Action {
       const callback = Route.map[pathname]
       if (callback) {
         result = callback(req)
+      } else if (pathname == "/__search__") {
+        const name = url.searchParams.get("name")
+        if (name) {
+          result = drive.search("/", name, req)
+        } else {
+          throw new Error(i18n(I18N_KEY.NOT_FOUND))
+        }
       } else {
         result = new Response(i18n(I18N_KEY.NOT_FOUND), { status: HttpStatus.Not_Found })
       }
