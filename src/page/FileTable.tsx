@@ -4,7 +4,7 @@ import { StyledTable } from "@style/StyledTable";
 import { Format } from "@util/Format";
 
 type ListProps = { data: (DriveFileData | DriveFolderData)[]; href: string; };
-export function FileList({ data, href }: ListProps) {
+export function FileTable({ data, href }: ListProps) {
     return (
         <StyledPage>
         <StyledTable>
@@ -13,6 +13,7 @@ export function FileList({ data, href }: ListProps) {
                 <th>名称</th>
                 <th>修改时间</th>
                 <th>大小</th>
+                <th>媒体类型</th>
             </thead>
             <tbody data-path={href}>
                 {data.map(({ name, size, createdDateTime, ...res }) => {
@@ -24,6 +25,9 @@ export function FileList({ data, href }: ListProps) {
                             <td><a href={`${href}/${name}`}>{name}</a></td>
                             <td>{date}</td>
                             <td data-size={size}>{Format.size(size)}</td>
+                            <td>{
+                                type == DriveDataType.FILE ? <a className="play" target="_blank" href={`${href}/${name}`}>播放</a> : null
+                            }</td>
                         </tr>
                     );
                 })}

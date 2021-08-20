@@ -4,8 +4,9 @@ import { Player } from "@page/Player";
 
 export async function play(req: Request): Promise<Response> {
     const params = new URL(req.url).searchParams;
-    const src = params.get("src");
+    let src = params.get("src");
     if (src) {
+        src = src.startsWith("http") ? src : atob(src)
         const url = new URL(src);
         const dir = url.pathname.substring(0, url.pathname.lastIndexOf("/"));
         let title = params.get("title") ?? "";

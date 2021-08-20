@@ -14,13 +14,13 @@ type HttpMethodCallback = (url: URL, req: Request) => Promise<Response>
 export class Route {
   static authReg = /\/__(auth|call|conf|keep|info)__$/
   static map: {[key: string]: (HttpCallback | undefined)} = {
-    "/__info__": info,
-    "/__auth__": auth,
-    "/__call__": call,
-    "/__conf__": conf,
-    "/__keep__": keep,
-    "/__login__": login,
-    "/__play__": play
+    "/fn/info": info,
+    "/fn/auth": auth,
+    "/fn/call": call,
+    "/fn/conf": conf,
+    "/fn/keep": keep,
+    "/fn/login": login,
+    "/fn/play": play
   }
 
   static match(url: URL): boolean {

@@ -68,11 +68,11 @@ export class HttpAction implements Action {
   async get(url: URL, req: Request) {
     let result;
     const pathname = url.pathname
-    if (pathname.startsWith("/__")) {
+    if (pathname.startsWith("/fn")) {
       const callback = Route.map[pathname]
       if (callback) {
         result = callback(req)
-      } else if (pathname == "/__search__") {
+      } else if (pathname == "/fn/search") {
         const name = url.searchParams.get("name")
         if (name) {
           result = drive.search("/", name, req)

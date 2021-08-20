@@ -6,7 +6,7 @@ import { DriveAllData, DriveDataInfo, DriveDataType, HttpStatus, ResponseContent
 import { WebDAV } from "@type/XML"
 import { cookies } from "@util/cookie"
 import { API_PREFIX } from "../OneDriveAdapter"
-import { FileList } from "@page/FileList"
+import { FileTable } from "@page/FileTable"
 import { auth } from "./auth"
 
 export async function read(path: string, req: Request, contentType?: ResponseContentType, isRoot?: boolean): Promise<Response> {
@@ -64,7 +64,7 @@ export async function read(path: string, req: Request, contentType?: ResponseCon
                             break;
                         }
                         case ResponseContentType.HTML: {
-                            body = render(FileList(props))
+                            body = render(FileTable(props))
                             break;
                         }
                         case ResponseContentType.XML: {
