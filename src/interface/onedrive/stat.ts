@@ -6,8 +6,9 @@ import { API_PREFIX } from "../OneDriveAdapter"
 import { auth } from "./auth"
 
 export async function stat(path: string, req: Request, contentType?: ContentType, isRoot?: boolean): Promise<Response> {
-    path = path.endsWith("/") ? path.substring(0, path.length - 1) : path
-    const url = `${API_PREFIX}/me/drive/root${path}}`
+    isRoot = isRoot ?? path === "/"
+    path = path.length !== 1 && path.endsWith("/") ? path.substring(0, path.length - 1) : path
+    const url = `${API_PREFIX}/me/drive/root${isRoot ? `` : `:${path}`}`
     const authorization = await auth()
     let result
     if (authorization) {
