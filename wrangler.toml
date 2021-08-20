@@ -14,6 +14,8 @@ kv_namespaces = [
    { binding = "STORE", id = "c1bd122c4a5443cd9e3c0321661a3293", preview_id = "c1bd122c4a5443cd9e3c0321661a3293" },
    # store-hi
    #{ binding = "STORE", id = "8f0483c091144566b7646868397da947", preview_id = "8f0483c091144566b7646868397da947" },
+   # store-lee
+   #{ binding = "STORE", id = "7233b97d6e8b4bf4b7f7e37b365205bd", preview_id = "7233b97d6e8b4bf4b7f7e37b365205bd" },
 ]
 
 [build]

@@ -6,7 +6,7 @@ export function Login() {
     return (
         <StyledPage>
             <div className="login-title">{i18n(I18N_KEY.LOGIN_TITLE)}</div>
-            <StyledForm method="POST" action="/__keep__">
+            <StyledForm method="POST" action="/fn/keep">
                 <input name="username" type="text" placeholder={i18n(I18N_KEY.LOGIN_USERNAME)} />
                 <input name="password" type="password" placeholder={i18n(I18N_KEY.LOGIN_PASSWORD)} />
                 <button>{i18n(I18N_KEY.LOGIN_SUBMIT)}</button>
