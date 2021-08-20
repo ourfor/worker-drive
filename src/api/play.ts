@@ -1,4 +1,4 @@
-import { ResponseContentType } from "@src/enum";
+import { ContentType } from "@src/enum";
 import { PlayerHTML, render } from "@page/render";
 import { Player } from "@page/Player";
 
@@ -28,13 +28,13 @@ export async function play(req: Request): Promise<Response> {
             needHLS
         }), {
             headers: {
-                "Content-Type": ResponseContentType.HTML
+                "Content-Type": ContentType.HTML
             }
         });
     }
     return new Response(render(Player()), {
         headers: {
-            "Content-Type": ResponseContentType.HTML
+            "Content-Type": ContentType.HTML
         }
     });
 }

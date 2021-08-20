@@ -1,12 +1,12 @@
 import { i18n, I18N_KEY } from "@lang/i18n";
 import { TOKEN } from "@src/const";
-import { HttpMethod, HttpStatus, ResponseContentType } from "@src/enum";
+import { HttpMethod, HttpStatus, ContentType } from "@src/enum";
 import { cookies } from "@util/cookie";
 import { API_PREFIX } from "../OneDriveAdapter";
 import { auth } from "./auth";
 
 type WriteResponse = { uploadUrl: string }
-export async function write(path: string, req: Request, contentType?: ResponseContentType): Promise<Response> {
+export async function write(path: string, req: Request, contentType?: ContentType): Promise<Response> {
     const url = new URL(`${API_PREFIX}/me/drive/root:${path}:/createUploadSession`);
     try {
         if(TOKEN.VALUE == cookies(req, TOKEN.KEY)) {

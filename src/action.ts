@@ -1,5 +1,5 @@
 import { Cors } from "@config/Cors";
-import { HttpMethod, HttpStatus, ResponseContentType } from "@src/enum";
+import { HttpMethod, HttpStatus, ContentType } from "@src/enum";
 import { Route } from "@route/route";
 import { i18n, I18N_KEY } from "@lang/i18n";
 import { basicAuthentication, verifyCredentials } from "@util/basicAuth";
@@ -22,37 +22,15 @@ export class HttpAction implements Action {
             const { username, password } = basicAuthentication(req)
             verifyCredentials(username, password)
     
-            if (req.headers.get("Content-Type") && req.headers.get("Depth") === "0") {
-              const xml = await req.text()
-              const data = WebDAV.xml2js<WebDAV.PropFind>(xml)
-              const content = WebDAV.createXMLResponse({
-                href: url.href,
-                updateAt: new Date().toISOString(),
-                createAt: new Date().toISOString(),
-                status: "HTTP/1.1 200 OK",
-              })
-              const xmlData: WebDAV.XML = {
-                multistatus: {
-                  _attributes: WebDAV.attributes,
-                  response: [
-                    content
-                  ]
-                }
-              }
-              const wrap = WebDAV.js2xml(xmlData)
-              return new Response(wrap, {
-                status: HttpStatus.Multi_Status,
-                headers: {
-                  ...Cors.corsHeaders,
-                  "Content-Type": ResponseContentType.XML
-                }
-              })
-            }
             // Only returns this response when no exception is thrown.
             const newReq = new Request(req, { method: HttpMethod.GET, body: null, headers: {
               cookie: `${TOKEN.KEY}=${TOKEN.VALUE}`,
             }})
-            return drive.read(url.pathname, newReq, ResponseContentType.XML)
+
+            if (req.headers.get("Content-Type") && req.headers.get("Depth") === "0") {
+              return drive.stat(url.pathname, newReq, ContentType.XML)
+            }
+            return drive.read(url.pathname, newReq, ContentType.XML)
           }
     
           // Not authenticated.
@@ -86,11 +64,11 @@ export class HttpAction implements Action {
       const accept = url.searchParams.get("accept")
       let type
       if (!accept || accept == "") {
-        type = ResponseContentType.HTML
+        type = ContentType.HTML
       } else if (accept == "json") {
-        type = ResponseContentType.JSON
+        type = ContentType.JSON
       } else {
-        type = ResponseContentType.XML
+        type = ContentType.XML
       }
       result = drive.read(pathname, req, type)
     }

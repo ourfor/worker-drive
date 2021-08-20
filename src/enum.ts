@@ -34,7 +34,7 @@ export enum HttpStatus {
     Request_URI_Too_Long = 414
 }
 
-export enum ResponseContentType {
+export enum ContentType {
     HTML = "text/html;charset=utf-8",
     JSON = "application/json;charset=utf-8",
     XML = "application/xml;charset=utf-8"
@@ -71,7 +71,8 @@ export interface DriveFolderData {
     type: DriveDataType.FOLDER
     name: string
     size: number
-    createdDateTime: string
+    createdDateTime: string,
+    lastModifiedDateTime: string
     folder: {
         childCounter: number
     }

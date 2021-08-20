@@ -1,11 +1,11 @@
 import { Cors } from "@config/Cors"
 import { i18n, I18N_KEY } from "@lang/i18n"
-import { ResponseContentType, HttpStatus, DriveItemsData, DriveFileData } from "@src/enum"
+import { ContentType, HttpStatus, DriveItemsData, DriveFileData } from "@src/enum"
 import { UnauthorizedException } from "@src/exception/Exception"
 import { API_PREFIX } from "../OneDriveAdapter"
 import { auth } from "./auth"
 
-export async function search(path: string, name: string, request: Request, contentType?: ResponseContentType): Promise<Response> {
+export async function search(path: string, name: string, request: Request, contentType?: ContentType): Promise<Response> {
     const authorization = await auth()
     if (!authorization) {
         throw new UnauthorizedException(i18n(I18N_KEY.NEED_LOGIN_TO_CONTINUE))

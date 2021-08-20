@@ -1,36 +1,47 @@
-import { ResponseContentType } from "@src/enum"
+import { ContentType } from "@src/enum"
 import { DriveAdapter } from "@src/interface/DriveAdapter"
-import { read } from "./onedrive/read"
-import { search } from "./onedrive/search"
+import { stat } from "./onedrive/stat"
 import { write } from "./onedrive/write"
+import { search } from "./onedrive/search"
+import { read } from "./onedrive/read"
 
 export const API_PREFIX = "https://graph.microsoft.com/v1.0"
 
 export class OneDriveAdapter implements DriveAdapter {
     /**
-     * 
+     * get file info
+     * @param path 
+     * @param request 
+     * @param contentType 
+     * @param isRoot 
+     */
+    stat = stat
+
+
+    /**
+     * create directory
      * @param path 
      * @param request 
      * 
      * @see https://docs.microsoft.com/en-us/graph/api/driveitem-post-children?view=graph-rest-1.0&tabs=http
      */
-    async mkdir(path: string, request: Request, contentType?: ResponseContentType): Promise<Response> {
+    async mkdir(path: string, request: Request, contentType?: ContentType): Promise<Response> {
         return new Response()
     }
 
     /**
-     * 
+     * delete file
      * @param path 
      * @param request 
      * 
      * @see https://docs.microsoft.com/en-us/graph/api/driveitem-copy?view=graph-rest-1.0&tabs=http
      */
-    async delete(path: string, request: Request, contentType?: ResponseContentType): Promise<Response> {
+    async delete(path: string, request: Request, contentType?: ContentType): Promise<Response> {
         return new Response()
     }
 
     /**
-     * 
+     * search file with name
      * @param path 
      * @param name 
      * @param request 
@@ -41,14 +52,14 @@ export class OneDriveAdapter implements DriveAdapter {
     search = search
 
     /**
-     * 
+     * move file or directory to another place
      * @param source 
      * @param destination 
      * @param request 
      * 
      * @see https://docs.microsoft.com/en-us/graph/api/driveitem-move?view=graph-rest-1.0&tabs=http
      */
-    async move(source: string, destination: string, request: Request, contentType?: ResponseContentType): Promise<Response> {
+    async move(source: string, destination: string, request: Request, contentType?: ContentType): Promise<Response> {
         return new Response()
     }
 
@@ -60,12 +71,13 @@ export class OneDriveAdapter implements DriveAdapter {
      * 
      * @see https://docs.microsoft.com/en-us/graph/api/driveitem-copy?view=graph-rest-1.0&tabs=http
      */
-    async copy(source: string, destination: string, request: Request, contentType?: ResponseContentType): Promise<Response> {
+    async copy(source: string, destination: string, request: Request, contentType?: ContentType): Promise<Response> {
         return new Response()
     }
 
+
     /**
-     * 
+     * read file content
      * @param path 
      * @param req 
      * @param isRoot 
@@ -76,7 +88,7 @@ export class OneDriveAdapter implements DriveAdapter {
     read = read
     
     /**
-     * 
+     * write content to file
      * @param path 
      * @param req 
      * @returns 

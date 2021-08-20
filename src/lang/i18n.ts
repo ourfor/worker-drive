@@ -21,7 +21,8 @@ export enum I18N_KEY {
     PLAYER_THUMBNAILS,
     PLAYER_CAPTION,
     PLAYER_NAME,
-    PLAYER_START
+    PLAYER_START,
+    UNKNOWN
 }
 
 export default interface I18N_MAP {
@@ -46,5 +47,6 @@ const CONST_STRING: I18N_MAP = {
     PERMISSION_DENY: "缺少相关权限",
     NEED_INIT: "需要初始化",
     NOT_FOUND: "没有找到",
-    NEED_LOGIN_TO_UPLOAD: "需要登录才能上传文件"
+    NEED_LOGIN_TO_UPLOAD: "需要登录才能上传文件",
+    UNKNOWN: "🧱 未知错误"
 }

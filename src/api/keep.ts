@@ -1,5 +1,5 @@
 import { TOKEN } from "@src/const";
-import { ResponseContentType } from "@src/enum";
+import { ContentType } from "@src/enum";
 import { i18n, I18N_KEY } from "@lang/i18n";
 import { redirect } from "@page/render";
 import { LoginSuccessTip } from "@page/Login";
@@ -12,7 +12,7 @@ export async function keep(request: Request): Promise<Response> {
         return new Response(redirect(LoginSuccessTip(), "/"), {
             headers: {
                 "Set-Cookie": `${TOKEN.KEY}=${TOKEN.VALUE}; Path=/`,
-                "Content-Type": ResponseContentType.HTML
+                "Content-Type": ContentType.HTML
             }
         });
     }

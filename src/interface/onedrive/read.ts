@@ -2,14 +2,14 @@ import { Cors } from "@config/Cors"
 import { i18n, I18N_KEY } from "@lang/i18n"
 import { render } from "@page/render"
 import { TOKEN } from "@src/const"
-import { DriveAllData, DriveDataInfo, DriveDataType, HttpStatus, ResponseContentType } from "@src/enum"
+import { DriveAllData, DriveDataInfo, DriveDataType, HttpStatus, ContentType } from "@src/enum"
 import { WebDAV } from "@type/XML"
 import { cookies } from "@util/cookie"
 import { API_PREFIX } from "../OneDriveAdapter"
 import { FileTable } from "@page/FileTable"
 import { auth } from "./auth"
 
-export async function read(path: string, req: Request, contentType?: ResponseContentType, isRoot?: boolean): Promise<Response> {
+export async function read(path: string, req: Request, contentType?: ContentType, isRoot?: boolean): Promise<Response> {
     path = path.length !== 1 && path.endsWith("/") ? path.substring(0, path.length - 1) : path
     const url = `${API_PREFIX}/me/drive/root${isRoot ? `/children` : `:${path}`}`
     const authorization = await auth()
@@ -59,15 +59,15 @@ export async function read(path: string, req: Request, contentType?: ResponseCon
                     const props = { data: items, href: href === "/" ? "" : href }
                     let body;
                     switch (contentType) {
-                        case ResponseContentType.JSON: {
+                        case ContentType.JSON: {
                             body = JSON.stringify(props)
                             break;
                         }
-                        case ResponseContentType.HTML: {
+                        case ContentType.HTML: {
                             body = render(FileTable(props))
                             break;
                         }
-                        case ResponseContentType.XML: {
+                        case ContentType.XML: {
                             const status = "HTTP/1.1 200 OK"
                             const origin = new URL(req.url).origin
                             const base = origin + path.replace(":/children", "/")
@@ -93,9 +93,9 @@ export async function read(path: string, req: Request, contentType?: ResponseCon
                         }
                     }
                     result = new Response(body, {
-                        status: contentType == ResponseContentType.XML ? HttpStatus.Multi_Status : HttpStatus.Ok,
+                        status: contentType == ContentType.XML ? HttpStatus.Multi_Status : HttpStatus.Ok,
                         headers: {
-                            'content-type': contentType ?? ResponseContentType.HTML
+                            'content-type': contentType ?? ContentType.HTML
                         }
                     })
                     break;
