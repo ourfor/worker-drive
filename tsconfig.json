@@ -30,10 +30,10 @@
       "@style/*": ["style/*"],
       "@data/*": ["data/*"],
       "@lang/*": ["lang/*"],
-      "@exception/*": ["exception/*"],
       "@interface/*": ["interface/*"],
       "@model/*": ["model/*"],
       "@view/*": ["view/*"],
+      "@exception": ["exception/*"],
       "@src/*": ["./*"]
     }
   },
