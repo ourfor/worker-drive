@@ -23,13 +23,12 @@ export class HttpAction implements Action {
             verifyCredentials(username, password)
     
             // Only returns this response when no exception is thrown.
+            if (req.headers.get("Depth") === "0") {
+              return drive.stat(url.pathname, req, ContentType.XML)
+            }
             const newReq = new Request(req, { method: HttpMethod.GET, body: null, headers: {
               cookie: `${TOKEN.KEY}=${TOKEN.VALUE}`,
             }})
-
-            if (req.headers.get("Content-Type") && req.headers.get("Depth") === "0") {
-              return drive.stat(url.pathname, newReq, ContentType.XML)
-            }
             return drive.read(url.pathname, newReq, ContentType.XML)
           }
     

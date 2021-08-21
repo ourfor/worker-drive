@@ -75,6 +75,13 @@ export interface DriveFolderData {
     lastModifiedDateTime: string
     folder: {
         childCounter: number
+    },
+    quota?: {
+        deleted: number,
+        remaining: number,
+        state: string,
+        total: number,
+        used: number
     }
 }
 

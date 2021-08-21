@@ -25,6 +25,10 @@ export namespace WebDAV {
     }
 
     export type Prop = {
+        quota?: number | {} | null,
+        quotaused?: number | {} | null,
+        "quota-used-bytes"?: number | {} | null,
+        "quota-available-bytes"?: number | {} | null 
         getlastmodified?: string | Date | null,
         lockdiscovery?: {} | null,
         supportedlock?: SupportedLock | null,
@@ -79,6 +83,16 @@ export namespace WebDAV {
         multistatus: MultiStatus
     }
 
+    export type XMLPropFind = {
+        _declaration?: {
+            _attributes: {
+                version: string,
+                encoding: string
+            }
+        },
+        propfind: PropFind
+    }
+
     export type ResponseData = {
         href: string,
         status: string,
@@ -87,13 +101,28 @@ export namespace WebDAV {
         name?: string,
         etag?: string | null,
         length?: number | null,
-        type?: string | null
+        type?: string | null,
+        quota?: QuotaData
     }
 
+    export type QuotaData = {
+        quota?: number | null,
+        quotaused?: number | null,
+        "quota-used-bytes"?: number | null,
+        "quota-available-bytes"?: number | null 
+    }
     const NotFound: PropStat = {
         status: "HTTP/1.1 404 Not Found",
         prop: {
             getcontentlength: null
+        }
+    }
+    function quotaInfo(quota: QuotaData): PropStat {
+        return {
+            status: "HTTP/1.1 200 OK",
+            prop: {
+                ...quota
+            }
         }
     }
     export function createXMLResponse({
@@ -104,7 +133,8 @@ export namespace WebDAV {
         name,
         etag,
         length,
-        type
+        type,
+        quota
     }: ResponseData): Response {
         let propstat
         if (type == DriveDataType.FILE) {
@@ -128,17 +158,18 @@ export namespace WebDAV {
                     prop: {
                         getlastmodified: updateAt,
                         creationdate: createAt,
+                        displayname: name,
                         resourcetype: {
                             collection: null
                         },
                         getcontentlength: length
                     }
                 },
-                NotFound
+                quota ? quotaInfo(quota) : NotFound
             ]
         }
         return {
-            href,
+            href: encodeURI(href),
             propstat
         }
     }
@@ -147,7 +178,7 @@ export namespace WebDAV {
     export function js2xml(data: XML): string {
         const options = {
             compact: true,
-            spaces: 4,
+            // spaces: 4,
             elementNameFn: (name: string) => "D:" + name
         }
         return convert.js2xml(data, options)
@@ -157,7 +188,6 @@ export namespace WebDAV {
         const prefixLength = "D:".length
         const options = {
             compact: true,
-            spaces: 4,
             elementNameFn: (name: string) => name.substring(prefixLength)
         }
         return convert.xml2js(data, options) as T

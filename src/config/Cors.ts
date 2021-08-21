@@ -9,7 +9,7 @@ export class Cors {
     'Access-Control-Allow-Headers': '*',
     'Access-Control-Expose-Headers': '*',
     'Access-Control-Allow-Credentials': 'true',
-    'Allow': 'PROPPATCH,PROPFIND,OPTIONS,DELETE,UNLOCK,COPY,LOCK,MOVE',
+    'Allow': 'PROPPATCH,PROPFIND,OPTIONS,COPY,MOVE,DELETE', // ,LOCK,UNLOCK
     'Accept-Ranges': 'bytes',
     'MS-Author-Via': 'DAV',
     'DAV': '1,2',
