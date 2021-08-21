@@ -1,4 +1,4 @@
-import { ConfigData } from "@type/ConfigData"
+import { ConfigData } from "@model/ConfigData"
 
 export class Cors {
   static readonly grantType: string = 'authorization_code'

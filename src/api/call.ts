@@ -1,6 +1,6 @@
 import { Cors } from "@config/Cors";
 import { CONST_URL } from "@src/const";
-import { TokenData } from "@type/TokenData";
+import { TokenData } from "@model/TokenData";
 import { i18n, I18N_KEY } from "@lang/i18n";
 
 

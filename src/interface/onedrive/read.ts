@@ -1,6 +1,6 @@
 import { Cors } from "@config/Cors"
 import { i18n, I18N_KEY } from "@lang/i18n"
-import { FileTable } from "@page/FileTable"
+import { FileTable } from "@view/FileTable"
 import { render } from "@page/render"
 import { TOKEN } from "@src/const"
 import { DriveAllData, DriveDataInfo, DriveDataType, HttpStatus, ContentType } from "@src/enum"
