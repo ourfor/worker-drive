@@ -1,3 +1,13 @@
+// 1. import default from the plugin module
+const createStyledComponentsTransformer = require('typescript-plugin-styled-components').default;
+
+// 2. create a transformer;
+// the factory additionally accepts an options object which described below
+const styledComponentsTransformer = createStyledComponentsTransformer({
+  ssr: true,
+  minify: true
+})
+
 const path = require('path')
 const { Stream } = require('stream')
 const mode = process.env.NODE_ENV || 'production'
@@ -27,6 +37,10 @@ module.exports = {
       "@util": path.resolve(__dirname, "./src/util"),
       "@style": path.resolve(__dirname, "./src/style"),
       "@lang": path.resolve(__dirname, "./src/lang"),
+      "@exception": path.resolve(__dirname, "./src/exception"),
+      "@interface": path.resolve(__dirname, "./src/interface"),
+      "@model": path.resolve(__dirname, "./src/model"),
+      "@view": path.resolve(__dirname, "./src/view"),
       "@src": path.resolve(__dirname, "./src")
 		}
   },
@@ -34,10 +48,10 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        use: [
-          'babel-loader',
-          'ts-loader'
-        ]
+        loader: 'ts-loader',
+        options: {
+          getCustomTransformers: () => ({ before: [styledComponentsTransformer] })
+        }
       },
     ],
   },

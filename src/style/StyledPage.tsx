@@ -1,4 +1,4 @@
-import { BACKGROUNDIMAGE } from "@src/const";
+import { CONST_URL } from "@src/const";
 import styled from "styled-components";
 
 export const StyledPage = styled.div`
@@ -10,7 +10,7 @@ export const StyledPage = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-image: url(${BACKGROUNDIMAGE});
+    background-image: url(${CONST_URL.BACKGROUNDIMAGE});
 
     .login-title, .login-success-tip {
         font-size: 2em;
