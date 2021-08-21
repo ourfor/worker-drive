@@ -41,7 +41,7 @@ export async function stat(path: string, req: Request, contentType?: ContentType
 
                   content = WebDAV.createXMLResponse({
                     name: data.name,
-                    href: encodeURI(req.url),
+                    href: req.url,
                     createAt: data.createdDateTime!,
                     updateAt: data.lastModifiedDateTime!,
                     status: WebDAV.Status.OK,
@@ -50,7 +50,7 @@ export async function stat(path: string, req: Request, contentType?: ContentType
                 } else {
                   content = WebDAV.createXMLResponse({
                     name: data.name,
-                    href: encodeURI(req.url),
+                    href: req.url,
                     createAt: data.createdDateTime!,
                     updateAt: data.lastModifiedDateTime!,
                     length: data.size,

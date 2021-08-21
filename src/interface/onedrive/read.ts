@@ -1,17 +1,17 @@
 import { Cors } from "@config/Cors"
 import { i18n, I18N_KEY } from "@lang/i18n"
+import { FileTable } from "@page/FileTable"
 import { render } from "@page/render"
 import { TOKEN } from "@src/const"
 import { DriveAllData, DriveDataInfo, DriveDataType, HttpStatus, ContentType } from "@src/enum"
 import { WebDAV } from "@type/XML"
 import { cookies } from "@util/cookie"
 import { API_PREFIX } from "../OneDriveAdapter"
-import { FileTable } from "@page/FileTable"
 import { auth } from "./auth"
 
 export async function read(path: string, req: Request, contentType?: ContentType, isRoot?: boolean): Promise<Response> {
     path = path.length !== 1 && path.endsWith("/") ? path.substring(0, path.length - 1) : path
-    const url = `${API_PREFIX}/me/drive/root${isRoot ? `/children` : `:${decodeURI(path)}`}`
+    const url = `${API_PREFIX}/me/drive/root${isRoot ? `/children` : `:${path}`}`
     const authorization = await auth()
     let result
     if (authorization) {
