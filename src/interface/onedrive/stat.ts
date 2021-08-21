@@ -7,10 +7,14 @@ import { auth } from "./auth"
 
 export async function stat(path: string, req: Request, contentType?: ContentType, isRoot?: boolean): Promise<Response> {
     const xml = await req.text()
-    const { propfind: props } = WebDAV.xml2js<WebDAV.XMLPropFind>(xml)
+    const { propfind } = WebDAV.xml2js<WebDAV.XMLPropFind>(xml)
     isRoot = isRoot ?? path === "/"
+    const isQuota = propfind.prop?.quota ||
+                    propfind.prop?.quotaused ||
+                    propfind.prop?.["quota-available-bytes"] ||
+                    propfind.prop?.["quota-used-bytes"]
     path = path.length !== 1 && path.endsWith("/") ? path.substring(0, path.length - 1) : path
-    const url = `${API_PREFIX}/me/drive${props.prop?.quota ? '' : isRoot ? '/root' : `/root:${path}`}`
+    const url = `${API_PREFIX}/me/drive${isQuota ? '' : isRoot ? '/root' : `/root:${path}`}`
     const authorization = await auth()
     let result
     if (authorization) {
@@ -26,20 +30,22 @@ export async function stat(path: string, req: Request, contentType?: ContentType
                     throw new Error(i18n(I18N_KEY.UNKNOWN))
                 }
                 let content
-                if (props.prop?.quota) {
+                if (isQuota) {
                   const quota = (data as DriveFolderData).quota
+                  const quotaKey = propfind.prop!
+                  const quotaValue: WebDAV.QuotaData = {}
+                  quotaKey.quota ? quotaValue.quota = quota?.total : null
+                  quotaKey.quotaused ? quotaValue.quotaused = quota?.used : null
+                  quotaKey["quota-available-bytes"] ? quotaValue["quota-available-bytes"] = quota?.remaining : null
+                  quotaKey["quota-used-bytes"] ? quotaValue["quota-used-bytes"] = quota?.used : null
+
                   content = WebDAV.createXMLResponse({
                     name: data.name,
                     href: encodeURI(req.url),
                     createAt: data.createdDateTime!,
                     updateAt: data.lastModifiedDateTime!,
-                    status: "HTTP/1.1 200 OK",
-                    quota: {
-                      quota: quota?.total,
-                      quotaused: quota?.used,
-                      "quota-available-bytes": quota?.remaining,
-                      "quota-used-bytes": quota?.used
-                    }
+                    status: WebDAV.Status.OK,
+                    quota: quotaValue
                   })
                 } else {
                   content = WebDAV.createXMLResponse({
@@ -48,10 +54,11 @@ export async function stat(path: string, req: Request, contentType?: ContentType
                     createAt: data.createdDateTime!,
                     updateAt: data.lastModifiedDateTime!,
                     length: data.size,
-                    status: "HTTP/1.1 200 OK",
+                    status: WebDAV.Status.OK,
                   })
                 }
                 const xmlData: WebDAV.XML = {
+                  _declaration: WebDAV.declaration,
                   multistatus: {
                     _attributes: WebDAV.attributes,
                     response: [

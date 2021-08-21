@@ -93,6 +93,10 @@ export namespace WebDAV {
         propfind: PropFind
     }
 
+    export const Status = {
+        OK: "HTTP/1.1 200 OK",
+        NotFound: "HTTP/1.1 404 Not Found"
+    }
     export type ResponseData = {
         href: string,
         status: string,
@@ -111,20 +115,24 @@ export namespace WebDAV {
         "quota-used-bytes"?: number | null,
         "quota-available-bytes"?: number | null 
     }
+
     const NotFound: PropStat = {
-        status: "HTTP/1.1 404 Not Found",
+        status: Status.NotFound,
         prop: {
             getcontentlength: null
         }
     }
+
+    // @see https://www.ietf.org/rfc/rfc4331.txt
     function quotaInfo(quota: QuotaData): PropStat {
         return {
-            status: "HTTP/1.1 200 OK",
             prop: {
                 ...quota
-            }
+            },
+            status: Status.OK,
         }
     }
+
     export function createXMLResponse({
         href,
         status,
@@ -152,21 +160,26 @@ export namespace WebDAV {
                 }
             }
         } else {
-            propstat = [
-                {
-                    status,
-                    prop: {
-                        getlastmodified: updateAt,
-                        creationdate: createAt,
-                        displayname: name,
-                        resourcetype: {
-                            collection: null
-                        },
-                        getcontentlength: length
-                    }
-                },
-                quota ? quotaInfo(quota) : NotFound
-            ]
+            if (quota) {
+                propstat = quotaInfo(quota)
+            } else {
+                propstat = [
+                    {
+                        status,
+                        prop: {
+                            getlastmodified: updateAt,
+                            creationdate: createAt,
+                            displayname: name,
+                            resourcetype: {
+                                collection: null
+                            },
+                            getcontentlength: length
+                        }
+                    },
+                    NotFound
+                ]
+            }
+
         }
         return {
             href: encodeURI(href),
@@ -188,7 +201,7 @@ export namespace WebDAV {
         const prefixLength = "D:".length
         const options = {
             compact: true,
-            elementNameFn: (name: string) => name.substring(prefixLength)
+            elementNameFn: (name: string) => name.startsWith("D:") ? name.substring(prefixLength) : name
         }
         return convert.xml2js(data, options) as T
     }

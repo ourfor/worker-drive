@@ -4,7 +4,6 @@ import { Route } from "@route/route";
 import { i18n, I18N_KEY } from "@lang/i18n";
 import { basicAuthentication, verifyCredentials } from "@util/basicAuth";
 import { TOKEN } from "./const";
-import { WebDAV } from "@type/XML";
 
 export interface Action {
   get: (url: URL, req: Request) => Promise<Response>;
@@ -113,7 +112,7 @@ export class HttpAction implements Action {
       return new Response(null, {
         headers: {
           ...Cors.corsHeaders,
-          Allow: "GET,HEAD,POST,PROPPATCH,PROPFIND,OPTIONS,DELETE,UNLOCK,COPY,LOCK,MOVE",
+          Allow: "GET,HEAD,POST,PROPPATCH,PROPFIND,OPTIONS,DELETE,COPY,MOVE", //,LOCK,UNLOCK
         },
       })
     }

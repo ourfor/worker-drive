@@ -35,9 +35,9 @@ export enum HttpStatus {
 }
 
 export enum ContentType {
-    HTML = "text/html;charset=utf-8",
-    JSON = "application/json;charset=utf-8",
-    XML = "application/xml;charset=utf-8"
+    HTML = "text/html; charset=utf-8",
+    JSON = "application/json; charset=utf-8",
+    XML = "application/xml; charset=utf-8"
 }
 
 export enum DriveAuthType {
