@@ -27,17 +27,24 @@ export async function read(path: string, req: Request, contentType?: ContentType
                     const {
                         '@microsoft.graph.downloadUrl': href
                     } = data
-                    const origin = await fetch(href, { headers })
-                    result = new Response(origin.body, origin);
-                    Cors.withOrigin(req.headers.get("origin"), result.headers)
                     const params = new URL(req.url).searchParams
-                    const disposition = params.get("disposition")
-                    if (disposition) {
+                    if (params.get("accept") === "proxy") {
+                        const origin = await fetch(href, { headers })
+                        result = new Response(origin.body, origin);
+                        Cors.withOrigin(req.headers.get("origin"), result.headers)
+                        const disposition = params.get("disposition")
                         if (disposition !== "attachment") {
-                            result.headers.set("Content-Disposition", disposition)
+                            result.headers.set("Content-Disposition", disposition ?? "inline")
+                        } else {
+                            result.headers.delete("Content-Disposition")
                         }
                     } else {
-                        result.headers.delete("Content-Disposition")
+                        result = new Response(null, {
+                            status: HttpStatus.Redirect,
+                            headers: {
+                                location: href
+                            }
+                        })
                     }
                     break;
                 }
