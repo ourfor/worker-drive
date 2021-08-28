@@ -9,7 +9,8 @@ export function render(content: ReactElement): string {
   renderToStaticMarkup(sheet.collectStyles(content))
   const script = (`
     console.log("Hello World")
-    document.querySelectorAll(".play").forEach(ele => (ele.href = "/fn/play?src=" + btoa(ele.href)))
+    //document.querySelectorAll(".play").forEach(ele => (ele.href = "/fn/play?src=" + btoa(ele.href)))
+    document.querySelectorAll(".play").forEach(ele => (ele.href = "iina://open?url=" + encodeURIComponent(ele.href)))
   `)
   const styles = sheet.getStyleElement() // or sheet.getStyleElement();
   const html = HTML5({ content, title: '秘密花园', styles, script })

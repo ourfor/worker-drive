@@ -8,6 +8,7 @@ import { WebDAV } from "@type/XML"
 import { cookies } from "@util/cookie"
 import { API_PREFIX } from "../OneDriveAdapter"
 import { auth } from "./auth"
+import { config } from "@config/config"
 
 export async function read(path: string, req: Request, contentType?: ContentType, isRoot?: boolean): Promise<Response> {
     path = decodeURI(path)
@@ -26,10 +27,11 @@ export async function read(path: string, req: Request, contentType?: ContentType
             switch(data.type) {
                 case DriveDataType.FILE: {
                     const {
-                        '@microsoft.graph.downloadUrl': href
+                        '@microsoft.graph.downloadUrl': href,
+                        size
                     } = data
                     const params = new URL(req.url).searchParams
-                    if (params.get("accept") === "proxy") {
+                    if (size <  config.proxyMaxSize || params.get("accept") === "proxy") {
                         const origin = await fetch(href, { headers })
                         result = new Response(origin.body, origin);
                         Cors.withOrigin(req.headers.get("origin"), result.headers)
