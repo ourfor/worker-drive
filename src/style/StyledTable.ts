@@ -25,12 +25,16 @@ export const StyledTable = styled.table`
         border-bottom-color: #222;
         cursor: pointer;
     }
-    & .play {
-        display: block;
+    & .play-iina, & .play-nplayer {
+        display: inline-block;
+        margin: 5px;
         width: 24px;
         height: 24px;
         border: none;
         background: center / cover no-repeat url("//static.ourfor.top/app/iina/icon.png")
+    }
+    & .play-nplayer {
+        background: center / cover no-repeat url("//static.ourfor.top/app/nplayer/nplayer.png")
     }
     i {
         width: 30px;

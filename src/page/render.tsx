@@ -10,7 +10,17 @@ export function render(content: ReactElement): string {
   const script = (`
     console.log("Hello World")
     //document.querySelectorAll(".play").forEach(ele => (ele.href = "/fn/play?src=" + btoa(ele.href)))
-    document.querySelectorAll(".play").forEach(ele => (ele.href = "iina://open?url=" + encodeURIComponent(ele.href)))
+    document.querySelectorAll(".play").forEach(ele => {
+      const url = ele.firstElementChild.href
+      const iina = document.createElement("a")
+      iina.classList.add("play-iina")
+      iina.href = "iina://open?url=" + encodeURIComponent(url)
+      ele.appendChild(iina)
+      const nplayer = document.createElement("a")
+      nplayer.classList.add("play-nplayer")
+      nplayer.href = "nplayer-http" + encodeURI(url).replace(/^https?/, '')
+      ele.appendChild(nplayer)
+    })
   `)
   const styles = sheet.getStyleElement() // or sheet.getStyleElement();
   const html = HTML5({ content, title: '秘密花园', styles, script })
