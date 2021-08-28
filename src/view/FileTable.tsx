@@ -26,7 +26,7 @@ export function FileTable({ data, href }: ListProps) {
                             <td>{date}</td>
                             <td data-size={size}>{Format.size(size)}</td>
                             <td>{
-                                type == DriveDataType.FILE ? <a className="play" target="_blank" href={`${href}/${name}`}>播放</a> : null
+                                type == DriveDataType.FILE ? <a className="play" target="_blank" href={`${href}/${name}`} /> : null
                             }</td>
                         </tr>
                     );
