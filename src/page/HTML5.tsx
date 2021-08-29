@@ -24,7 +24,7 @@ export function HTML5 ({ title, styles, redirect, url, content, script }: HTML5P
             </head>
             <body>{content}</body>
             <script dangerouslySetInnerHTML={{__html: script ?? ""}} />
-            <script src="app.js" />
+            <script type="text/javascript" src="/dashboard/js/app.js" />
         </html>
     )
 }
