@@ -7,6 +7,6 @@ export enum CONST_URL {
 export const TOKEN = {
     KEY: "token",
     VALUE: "EFF5D005-2E6A-4F3A-87B8-FF3D237AA902",
-    USERNAME: "ourfor",
-    PASSWORD: "Kiss2020"
+    USERNAME: "admin",
+    PASSWORD: "123abc"
 }
