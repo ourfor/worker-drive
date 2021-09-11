@@ -73,6 +73,7 @@ export interface DriveFolderData {
     size: number
     createdDateTime: string,
     lastModifiedDateTime: string
+    webUrl: string,
     folder: {
         childCounter: number
     },
@@ -96,7 +97,7 @@ export interface DriveErrorData {
 export interface DriveItemsData {
     type: DriveDataType.ITEMS
     value: (DriveFileData|DriveFolderData)[],
-    '@odata.nextLink': string
+    '@odata.nextLink'?: string
 }
 
 export class DriveDataInfo {

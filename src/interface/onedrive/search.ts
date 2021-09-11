@@ -4,6 +4,7 @@ import { ContentType, HttpStatus, DriveItemsData, DriveFileData } from "@src/enu
 import { UnauthorizedException } from "@src/exception/Exception"
 import { API_PREFIX } from "../OneDriveAdapter"
 import { auth } from "./auth"
+import { DriveDataInfo, DriveDataType } from "@src/enum"
 
 export async function search(path: string, name: string, request: Request, contentType?: ContentType): Promise<Response> {
     const authorization = await auth()
@@ -16,26 +17,47 @@ export async function search(path: string, name: string, request: Request, conte
     const url = `${API_PREFIX}/me/drive/root/search(q='${name}')${nextToken ? `?$skiptoken=${nextToken}` : ""}`
     const response = await fetch(url, { headers: { authorization }})
     const items = await response.json() as DriveItemsData
+    const proxy = reqUrl.searchParams.get("proxy")
+    if (proxy == "false") {
+        return new Response(JSON.stringify(items), {
+            headers: {
+                ...Cors.corsHeaders
+            }
+        })
+    }
     const { value, "@odata.nextLink": nextLink } = items
-    const files = (value as DriveFileData[]).map(({name, webUrl, size, createdDateTime, lastModifiedDateTime, file: { mimeType }}) => {
+    const files = value.map(item => {
+        const { name, webUrl, size, createdDateTime, lastModifiedDateTime } = item;
+        DriveDataInfo.info(item)
+        let type = null
+        switch (item.type) {
+            case DriveDataType.FILE:
+                type = item.file.mimeType
+                break
+            case DriveDataType.FOLDER:
+                type = "folder"
+                break
+            default:
+                break
+        }
         const str = new URL(webUrl).pathname.replace("/personal/","")
-        const pathname = str.substring(str.indexOf("/"))
+        const pathname = str.substring(str.indexOf("/")).replace("Documents/","")
         return {
             name,
             size,
             createAt: createdDateTime,
             updateAt: lastModifiedDateTime,
             path: origin + pathname,
-            type: mimeType
+            type
         }
     })
-    const next = new URL(nextLink).searchParams.get("$skiptoken") ?? ""
-    if (next) {
+    if (nextLink) {
+        const next = new URL(nextLink).searchParams.get("$skiptoken") ?? ""
         reqUrl.searchParams.set("next", next)
     }
     const data = {
         data: files,
-        next: next ? reqUrl.href : null
+        next: nextLink ? reqUrl.href : null
     }
     return new Response(JSON.stringify(data), {
         headers: {

@@ -111,3 +111,11 @@ export const TOKEN = {
 ![](./doc/cloudflare_token_renew.png)
 
 最后打开`https://your_domain/fn/conf`登录你的onedrive账号，登录成功后，程序会自动查找云盘的`index.html`文件，如果有就会显示，没有就会显示错误的数据，一般用户没有目录浏览的权限，你可以通过`https://your_domain/fn/login`用上面配置的账号登录，这样程序就会显示目录，不会再查找`index.html`文件
+
+
+# 常见问题
+1. 为什么管理员用户名和密码写死在源码中，而不是保存在KV中，可以添加多个用户
+这一点是基于性能考虑，cloudflare提供的worker访问kv的速度到底咋样，其实感受也不直观，理论上是没法避免访问kv的，毕竟onedrive的token是保存在kv中的
+
+2. 为什么不提供网页播放，而是提供外部播放器打开
+其实是有写网页播放的，地址是`/fn/play`，不过比较遗憾的是浏览器目前没办法硬解`HEVC`，同时html对mkv支持也不好，所以
