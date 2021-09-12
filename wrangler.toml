@@ -1,11 +1,10 @@
-name = "drive"
+name = "drive-kiss"
 type = "javascript"
 account_id = "c04380e1591f31dd7c42f710541dd5d6"
 zone_id = "ec1677e19b1b70e68d591fa5b8c5aa57"
 workers_dev = true
 routes = [
-   "drive.tellkeep.ml/*",
-   "cloud.tellkeep.ml/*"
+   "drive-kiss.tellkeep.ml/*",
 ]
 webpack_config = "webpack.config.js"
 
