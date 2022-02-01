@@ -7,6 +7,7 @@ import { conf } from "@api/conf"
 import { keep } from "@api/keep"
 import { login } from "@service/login"
 import { play } from "@api/play"
+import { qrcode } from "@api/qrcode"
 
 type HttpCallback = (request: Request) => Promise<Response>
 type HttpMethodCallback = (url: URL, req: Request) => Promise<Response>
@@ -20,7 +21,8 @@ export class Route {
     "/fn/conf": conf,
     "/fn/keep": keep,
     "/fn/login": login,
-    "/fn/play": play
+    "/fn/play": play,
+    "/fn/qrcode": qrcode
   }
 
   static match(url: URL): boolean {

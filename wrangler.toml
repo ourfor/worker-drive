@@ -1,16 +1,36 @@
-name = "drive-kiss"
 type = "javascript"
 account_id = "c04380e1591f31dd7c42f710541dd5d6"
-zone_id = "ec1677e19b1b70e68d591fa5b8c5aa57"
+zone_id = "fdc61f6bb9ce029367dd6e3f793b97b6"
 workers_dev = true
+webpack_config = "webpack.config.js"
+
+[env.kiss]
+name = "drive-kiss"
 routes = [
    "drive-kiss.tellkeep.ml/*",
 ]
-webpack_config = "webpack.config.js"
+kv_namespaces = [
+   { binding = "STORE", id = "c1bd122c4a5443cd9e3c0321661a3293", preview_id = "c1bd122c4a5443cd9e3c0321661a3293" },
+]
+
+[env.hi]
+name = "drive-hi"
+routes = [
+   "drive-hi.tellkeep.ml/*",
+]
 
 kv_namespaces = [
-   # store
-   { binding = "STORE", id = "c1bd122c4a5443cd9e3c0321661a3293", preview_id = "c1bd122c4a5443cd9e3c0321661a3293" },
+   { binding = "STORE", id = "8f0483c091144566b7646868397da947", preview_id = "8f0483c091144566b7646868397da947" },
+]
+
+[env.lee]
+name = "drive-lee"
+routes = [
+   "drive-lee.tellkeep.ml/*",
+]
+
+kv_namespaces = [
+   { binding = "STORE", id = "7233b97d6e8b4bf4b7f7e37b365205bd", preview_id = "7233b97d6e8b4bf4b7f7e37b365205bd" },
 ]
 
 [build]

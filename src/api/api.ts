@@ -4,6 +4,7 @@ import { conf } from "@api/conf";
 import { info } from "@api/info";
 import { keep } from "@api/keep";
 import { play } from "@api/play";
+import { qrcode } from "@api/qrcode";
 
 export {
     auth,
@@ -11,5 +12,6 @@ export {
     conf,
     info,
     keep,
-    play
+    play,
+    qrcode
 }
