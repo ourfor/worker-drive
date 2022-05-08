@@ -14,15 +14,17 @@ export function Provider<T>(type: BeanType): T | null {
     switch (type) {
         case BeanType.STORE: {
             instance = WorkerStoreService
+            break
         }
         case BeanType.TIME: {
             instance = WorkerTimeService
+            break
         }
         case BeanType.HTTP_SERVER: {
             instance = WorkerWebService
+            break
         }
         default: {
-
         }
     }
     return instance as T

@@ -11,12 +11,12 @@ const tasks: ScheduledTask[] = [];
 export const WorkerTimeService: TimeService = {
   start: function (task: ScheduledTask) {
     addEventListener('scheduled', (event: ScheduledEvent) => {
-      const args: TimeEvent = {
+      const timeEvent: TimeEvent = {
         time: event.scheduledTime
       }
 
       const doTask: () => Promise<void> = () => {
-        return task(args)
+        return task(timeEvent)
       }
 
       event.waitUntil(doTask())

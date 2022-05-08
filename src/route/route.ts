@@ -5,7 +5,7 @@ import { Action } from "@src/action"
 import { HttpMethod } from "@src/enum"
 import { conf } from "@api/conf"
 import { keep } from "@api/keep"
-import { login } from "@service/login"
+import { login } from "@api/login"
 import { play } from "@api/play"
 import { qrcode } from "@api/qrcode"
 
@@ -14,7 +14,7 @@ type HttpMethodCallback = (url: URL, req: Request) => Promise<Response>
 
 export class Route {
   static authReg = /\/__(auth|call|conf|keep|info)__$/
-  static map: {[key: string]: (HttpCallback | undefined)} = {
+  static map: { [key: string]: (HttpCallback | undefined) } = {
     "/fn/info": info,
     "/fn/auth": auth,
     "/fn/call": call,
@@ -33,12 +33,12 @@ export class Route {
     const { method } = req
     const url = new URL(req.url)
     let result;
-    if(method == HttpMethod.GET || method == HttpMethod.HEAD) {
-      result = action.get(url,req)
+    if (method == HttpMethod.GET || method == HttpMethod.HEAD) {
+      result = action.get(url, req)
     } else if (method == HttpMethod.POST) {
-      result = action.post(url,req)
+      result = action.post(url, req)
     } else if (method == HttpMethod.OPTIONS) {
-      result = action.options(url,req)
+      result = action.options(url, req)
     } else if (method == HttpMethod.PROPFIND) {
       result = action.propfind(url, req)
     } else {
