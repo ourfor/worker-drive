@@ -1,3 +1,4 @@
+import { onedrive } from "@interface/OneDriveService";
 import { WorkerStoreService } from "@service/WorkerStoreService"
 import { WorkerTimeService } from "@service/WorkerTimeService";
 import { WorkerWebService } from "@service/WorkerWebService";
@@ -6,7 +7,8 @@ export enum BeanType {
     STORE,
     HTTP,
     TIME,
-    HTTP_SERVER
+    HTTP_SERVER,
+    DRIVE
 }
 
 export function Provider<T>(type: BeanType): T | null {
@@ -22,6 +24,10 @@ export function Provider<T>(type: BeanType): T | null {
         }
         case BeanType.HTTP_SERVER: {
             instance = WorkerWebService
+            break
+        }
+        case BeanType.DRIVE: {
+            instance = onedrive
             break
         }
         default: {

@@ -6,7 +6,7 @@ import { TOKEN } from "@src/const"
 import { DriveAllData, DriveDataInfo, DriveDataType, HttpStatus, ContentType } from "@src/enum"
 import { WebDAV } from "@type/XML"
 import { cookies } from "@util/cookie"
-import { API_PREFIX } from "../OneDriveAdapter"
+import { API_PREFIX } from "../OneDriveService"
 import { auth } from "./auth"
 import { config } from "@config/config"
 
@@ -24,14 +24,14 @@ export async function read(path: string, req: Request, contentType?: ContentType
             const res = await fetch(request)
             const data: DriveAllData = await res.json()
             DriveDataInfo.info(data)
-            switch(data.type) {
+            switch (data.type) {
                 case DriveDataType.FILE: {
                     const {
                         '@microsoft.graph.downloadUrl': href,
                         size
                     } = data
                     const params = new URL(req.url).searchParams
-                    if (size <  config.proxyMaxSize || params.get("accept") === "proxy") {
+                    if (size < config.proxyMaxSize || params.get("accept") === "proxy") {
                         const origin = await fetch(href, { headers })
                         result = new Response(origin.body, origin);
                         Cors.withOrigin(req.headers.get("origin"), result.headers)
@@ -53,19 +53,19 @@ export async function read(path: string, req: Request, contentType?: ContentType
                 }
                 case DriveDataType.FOLDER: {
                     try {
-                        if(TOKEN.VALUE == cookies(req, TOKEN.KEY)) {
+                        if (TOKEN.VALUE == cookies(req, TOKEN.KEY)) {
                             result = read(`${path}:/children`, req, contentType)
                         } else {
                             throw new Error(i18n(I18N_KEY.PERMISSION_DENY))
                         }
-                    } catch(error) {
+                    } catch (error: any) {
                         result = new Response(error)
                     }
                     break;
                 }
                 case DriveDataType.ITEMS: {
                     const { value: items } = data;
-                    const href = path.replace(':/children','')                    
+                    const href = path.replace(':/children', '')
                     const props = { data: items, href: href === "/" ? "" : href }
                     let body;
                     switch (contentType) {
@@ -92,7 +92,7 @@ export async function read(path: string, req: Request, contentType?: ContentType
                                         status,
                                         createAt: item.createdDateTime ?? "",
                                         updateAt: item.createdDateTime ?? "",
-                                        type: item.hasOwnProperty('file') ? DriveDataType.FILE: DriveDataType.FOLDER,
+                                        type: item.hasOwnProperty('file') ? DriveDataType.FILE : DriveDataType.FOLDER,
                                         name: item.name,
                                         etag: item.type == DriveDataType.FILE ? item.eTag : null
                                     }))
@@ -111,15 +111,15 @@ export async function read(path: string, req: Request, contentType?: ContentType
                     break;
                 }
                 case DriveDataType.ERROR: {
-                    if(path.endsWith('/')) {
-                        if(TOKEN.VALUE === cookies(req, TOKEN.KEY)) {
+                    if (path.endsWith('/')) {
+                        if (TOKEN.VALUE === cookies(req, TOKEN.KEY)) {
                             if (path === "/") {
                                 result = read('/', req, contentType, true)
                             } else {
-                                result = read(path+':/children', req)
+                                result = read(path + ':/children', req)
                             }
                         } else {
-                            result = read(path+'/index.html', req)
+                            result = read(path + '/index.html', req)
                         }
                     } else result = new Response(JSON.stringify({
                         details: data.error,
@@ -128,7 +128,7 @@ export async function read(path: string, req: Request, contentType?: ContentType
                     break;
                 }
             }
-        } catch (error) {
+        } catch (error: any) {
             result = new Response(error)
         }
     } else {

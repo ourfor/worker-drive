@@ -12,7 +12,7 @@ export async function RefreshOneDriveToken({ time }: TimeEvent): Promise<any> {
     const date = new Date().toLocaleString('zh-cn')
     return new Promise(async (resolve, reject) => {
         try {
-            const json = await STORE.get('auth')
+            const json = await store.get<string>('auth')
             if (json) {
                 const token: TokenData = JSON.parse(json)
                 const url = new URL(CONST_URL.TOKEN)

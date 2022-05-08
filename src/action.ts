@@ -4,6 +4,8 @@ import { Route } from "@route/route";
 import { i18n, I18N_KEY } from "@lang/i18n";
 import { basicAuthentication, verifyCredentials } from "@util/basicAuth";
 import { TOKEN } from "./const";
+import { DriveService } from "@service/DriveService";
+import { BeanType, Provider } from "@service/Provider";
 
 export interface Action {
   get: (url: URL, req: Request) => Promise<Response>;
@@ -14,31 +16,39 @@ export interface Action {
 
 export class HttpAction implements Action {
 
+  constructor() {
+    this.drive = Provider<DriveService>(BeanType.DRIVE)!
+  }
+
+  drive!: DriveService;
+
   async propfind(url: URL, req: Request) {
-          // The "Authorization" header is sent when authenticated.
-          if (req.headers.has('Authorization')) {
-            // Throws exception when authorization fails.
-            const { username, password } = basicAuthentication(req)
-            verifyCredentials(username, password)
-    
-            // Only returns this response when no exception is thrown.
-            if (req.headers.get("Depth") === "0") {
-              return drive.stat(url.pathname, req, ContentType.XML)
-            }
-            const newReq = new Request(req, { method: HttpMethod.GET, body: null, headers: {
-              cookie: `${TOKEN.KEY}=${TOKEN.VALUE}`,
-            }})
-            return drive.read(url.pathname, newReq, ContentType.XML)
-          }
-    
-          // Not authenticated.
-          return new Response('You need to login.', {
-            status: 401,
-            headers: {
-              // Prompts the user for credentials.
-              'WWW-Authenticate': 'Basic realm="my scope", charset="UTF-8"'
-            }
-          })
+    // The "Authorization" header is sent when authenticated.
+    if (req.headers.has('Authorization')) {
+      // Throws exception when authorization fails.
+      const { username, password } = basicAuthentication(req)
+      verifyCredentials(username, password)
+
+      // Only returns this response when no exception is thrown.
+      if (req.headers.get("Depth") === "0") {
+        return this.drive.stat(url.pathname, req, ContentType.XML)
+      }
+      const newReq = new Request(req, {
+        method: HttpMethod.GET, body: null, headers: {
+          cookie: `${TOKEN.KEY}=${TOKEN.VALUE}`,
+        }
+      })
+      return this.drive.read(url.pathname, newReq, ContentType.XML)
+    }
+
+    // Not authenticated.
+    return new Response('You need to login.', {
+      status: 401,
+      headers: {
+        // Prompts the user for credentials.
+        'WWW-Authenticate': 'Basic realm="my scope", charset="UTF-8"'
+      }
+    })
   }
 
   async get(url: URL, req: Request) {
@@ -51,7 +61,7 @@ export class HttpAction implements Action {
       } else if (pathname == "/fn/search") {
         const name = url.searchParams.get("name")
         if (name) {
-          result = drive.search("/", name, req)
+          result = this.drive.search("/", name, req)
         } else {
           throw new Error(i18n(I18N_KEY.NOT_FOUND))
         }
@@ -68,7 +78,7 @@ export class HttpAction implements Action {
       } else {
         type = ContentType.XML
       }
-      result = drive.read(pathname, req, type)
+      result = this.drive.read(pathname, req, type)
     }
     return result
   }
@@ -80,7 +90,7 @@ export class HttpAction implements Action {
     if (callback) {
       result = callback(req)
     } else {
-      result = drive.write(url.pathname, req);
+      result = this.drive.write(url.pathname, req);
     }
     return result
   }
@@ -98,11 +108,11 @@ export class HttpAction implements Action {
       const allowHeaders = req.headers.get("Access-Control-Request-Headers")
       const respHeaders = {
         ...Cors.corsHeaders,
-      // Allow all future content Request headers to go back to browser
-      // such as Authorization (Bearer) or X-Client-Name-Version
+        // Allow all future content Request headers to go back to browser
+        // such as Authorization (Bearer) or X-Client-Name-Version
         "Access-Control-Allow-Headers": allowHeaders ? allowHeaders : "*"
       }
-  
+
       return new Response(null, {
         headers: respHeaders,
       })

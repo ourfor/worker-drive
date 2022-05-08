@@ -1,5 +1,5 @@
 import { ContentType } from "@src/enum"
-import { DriveAdapter } from "@src/interface/DriveAdapter"
+import { DriveService } from "@service/DriveService"
 import { stat } from "./onedrive/stat"
 import { write } from "./onedrive/write"
 import { search } from "./onedrive/search"
@@ -7,7 +7,7 @@ import { read } from "./onedrive/read"
 
 export const API_PREFIX = "https://graph.microsoft.com/v1.0"
 
-export class OneDriveAdapter implements DriveAdapter {
+export class OneDriveService implements DriveService {
     /**
      * get file info
      * @param path 
@@ -86,7 +86,7 @@ export class OneDriveAdapter implements DriveAdapter {
      * @see https://docs.microsoft.com/en-us/graph/api/driveitem-get-content?view=graph-rest-1.0&tabs=http
      */
     read = read
-    
+
     /**
      * write content to file
      * @param path 
@@ -98,7 +98,7 @@ export class OneDriveAdapter implements DriveAdapter {
     write = write
 }
 
-const onedrive = new OneDriveAdapter()
+const onedrive = new OneDriveService()
 
 export {
     onedrive

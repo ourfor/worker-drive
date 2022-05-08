@@ -1,6 +1,6 @@
 import { ContentType } from "@src/enum";
 
-export interface DriveAdapter {
+export interface DriveService {
     stat(path: string, request: Request, contentType?: ContentType, isRoot?: boolean): Promise<Response>,
     read(path: string, request: Request, contentType?: ContentType, isRoot?: boolean): Promise<Response>,
     write(path: string, request: Request, contentType?: ContentType): Promise<Response>,

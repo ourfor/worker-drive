@@ -2,7 +2,7 @@ import { Cors } from "@config/Cors"
 import { i18n, I18N_KEY } from "@lang/i18n"
 import { ContentType, HttpStatus, DriveItemsData, DriveFileData } from "@src/enum"
 import { UnauthorizedException } from "@src/exception/Exception"
-import { API_PREFIX } from "../OneDriveAdapter"
+import { API_PREFIX } from "../OneDriveService"
 import { auth } from "./auth"
 import { DriveDataInfo, DriveDataType } from "@src/enum"
 
@@ -15,7 +15,7 @@ export async function search(path: string, name: string, request: Request, conte
     const origin = reqUrl.origin
     const nextToken = reqUrl.searchParams.get("next")
     const url = `${API_PREFIX}/me/drive/root/search(q='${name}')${nextToken ? `?$skiptoken=${nextToken}` : ""}`
-    const response = await fetch(url, { headers: { authorization }})
+    const response = await fetch(url, { headers: { authorization } })
     const items = await response.json() as DriveItemsData
     const proxy = reqUrl.searchParams.get("proxy")
     if (proxy == "false") {
@@ -40,8 +40,8 @@ export async function search(path: string, name: string, request: Request, conte
             default:
                 break
         }
-        const str = new URL(webUrl).pathname.replace("/personal/","")
-        const pathname = str.substring(str.indexOf("/")).replace("Documents/","")
+        const str = new URL(webUrl).pathname.replace("/personal/", "")
+        const pathname = str.substring(str.indexOf("/")).replace("Documents/", "")
         return {
             name,
             size,
