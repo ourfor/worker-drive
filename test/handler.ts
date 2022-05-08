@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { handleRequest } from "@service/handler"
+import { HTTPRequestHandler } from "@task/HTTPRequestHandler"
 
 describe('handler returns response with request method', () => {
   const methods = [
@@ -15,7 +15,7 @@ describe('handler returns response with request method', () => {
   ]
   methods.forEach((method) => {
     it(method, async () => {
-      const result = await handleRequest(new Request('/', { method }))
+      const result = await HTTPRequestHandler(new Request('/', { method }))
       const text = await result.text()
       expect(text).to.include(method)
     })

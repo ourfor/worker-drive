@@ -40,6 +40,7 @@ module.exports = {
       "@exception": path.resolve(__dirname, "./src/exception"),
       "@interface": path.resolve(__dirname, "./src/interface"),
       "@model": path.resolve(__dirname, "./src/model"),
+      "@task": path.resolve(__dirname, "./src/task"),
       "@view": path.resolve(__dirname, "./src/view"),
       "@src": path.resolve(__dirname, "./src")
 		}

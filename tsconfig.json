@@ -33,6 +33,7 @@
       "@interface/*": ["interface/*"],
       "@model/*": ["model/*"],
       "@view/*": ["view/*"],
+      "@task/*": ["task/*"],
       "@exception": ["exception/*"],
       "@src/*": ["./*"]
     }

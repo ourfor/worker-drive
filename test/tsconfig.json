@@ -11,7 +11,17 @@
       "@route/*": ["../src/route/*"],
       "@service/*": ["../src/service/*"],
       "@config/*": ["../src/config/*"],
+      "@api/*": ["../src/api/*"],
       "@page/*": ["../src/page/*"],
+      "@util/*": ["../src/util/*"],
+      "@style/*": ["../src/style/*"],
+      "@data/*": ["../src/data/*"],
+      "@lang/*": ["../src/lang/*"],
+      "@interface/*": ["../src/interface/*"],
+      "@model/*": ["../src/model/*"],
+      "@view/*": ["../src/view/*"],
+      "@task/*": ["../src/task/*"],
+      "@exception": ["../src/exception/*"],
       "@src/*": ["./*"]
     }
   },

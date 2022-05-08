@@ -1,13 +1,14 @@
-import { handleRequest } from "@service/handler"
-import { handleSchedule } from "@service/trigger"
+import { HTTPRequestHandler } from "@task/HTTPRequestHandler"
+import { BeanType, Provider } from "@service/Provider"
+import { TimeService } from "@service/TimeService"
+import { WebService } from "@service/WebService"
 import { onedrive } from "@src/interface/OneDriveAdapter"
+import { RefreshOneDriveToken } from "@task/RefreshOneDriveToken"
 
 globalThis.drive = onedrive
 
-addEventListener('fetch', (event: FetchEvent) => {
-  event.respondWith(handleRequest(event.request))
-})
+const server = Provider<WebService>(BeanType.HTTP_SERVER)!
+server.start(HTTPRequestHandler)
 
-addEventListener('scheduled', (event: ScheduledEvent) => {
-  event.waitUntil(handleSchedule(event))
-})
+const timer = Provider<TimeService>(BeanType.TIME)!
+timer.start(RefreshOneDriveToken)

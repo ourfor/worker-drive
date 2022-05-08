@@ -2,7 +2,8 @@ import { Cors } from "@config/Cors";
 import { CONST_URL } from "@src/const";
 import { TokenData } from "@model/TokenData";
 import { i18n, I18N_KEY } from "@lang/i18n";
-
+import { StoreService } from "@service/StoreService";
+import { BeanType, Provider } from "@service/Provider";
 
 export async function call(request: Request): Promise<Response> {
     const url = new URL(request.url)
@@ -20,10 +21,11 @@ export async function call(request: Request): Promise<Response> {
     let result;
     if (res.ok) {
         try {
+            const store = Provider<StoreService>(BeanType.STORE)!
             const data: TokenData = await res.json();
-            await STORE.put('auth', JSON.stringify(data));
+            await store.put('auth', JSON.stringify(data));
             result = new Response(i18n(I18N_KEY.LOGIN_SUCCESS));
-        } catch (error) {
+        } catch (error: any) {
             result = new Response(error);
         }
     } else {
