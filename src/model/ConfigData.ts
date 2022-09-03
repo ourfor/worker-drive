@@ -3,4 +3,5 @@ export interface ConfigData {
     secret: string
     scope: string[]
     redirect: string
+    version: number
 }
