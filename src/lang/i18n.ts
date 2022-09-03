@@ -22,6 +22,10 @@ export enum I18N_KEY {
     PLAYER_CAPTION,
     PLAYER_NAME,
     PLAYER_START,
+    FILE_TYPE,
+    FILE_NAME,
+    FILE_MODIFY_TIME,
+    FILE_SIZE,
     UNKNOWN
 }
 
@@ -48,5 +52,9 @@ const CONST_STRING: I18N_MAP = {
     NEED_INIT: "需要初始化",
     NOT_FOUND: "没有找到",
     NEED_LOGIN_TO_UPLOAD: "需要登录才能上传文件",
-    UNKNOWN: "🧱 未知错误"
+    UNKNOWN: "🧱 未知错误",
+    FILE_TYPE: "文件类型",
+    FILE_NAME: "文件名",
+    FILE_MODIFY_TIME: "修改时间",
+    FILE_SIZE: "文件大小",
 }
