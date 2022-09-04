@@ -1,49 +1,51 @@
 # drive-worker
-
-# 使用体验
-## 特点
-1. 小文件由cloudflare代理并缓存
+Making your drive as online file website
+# Experience
+## Feature
+1. tiny file use cloudflare proxy
 2. url中可以设置是否由cloudflare代理
 3. 支持直接调用iina和nplayer播放
 4. 支持webdav，可以在视频播放中挂载，不建议挂载为文件系统，请求次数太过频繁会被微软临时限制请求
 5. 无需服务器，0搭建维护成本
 6. 支持简单安全认证
 
-## 效果预览
-![文件预览](./doc/file_list_preview.png)
+## Screenshot
+![file preview](./doc/file_list_preview.png)
 
-![媒体播放](./doc/file_media_play.png)
+![media play](./doc/file_media_play.png)
 
-# 开始使用
+# Start
 
-## 前提条件
+## PreRequirement
 
-1. 一个域名
-2. 一个OneDrive账号
+1. one domain
+2. one OneDrive account
 
-## 部署
+## Deploy
 
-### 注册并将域名绑定Cloudflare
-这部分网上教程很多，可以参考，挺简单的
+### Register and bind domain to Cloudflare
+You can reference many online tutorials. It is very simple.
 
-### 复制账号ID和区域ID
-![复制账号ID](./doc/cloudflare_zone_id.png)
+### Copy account ID and zone ID
+![copy account ID](./doc/cloudflare_zone_id.png)
 
-将复制的账号ID和区域ID分别粘贴到`wrangler.toml`文件中
+paster your **Account ID** and **Zone ID** to `wrangler.toml`
+
+example:
 ```
 account_id = "c04380e1591f31dd7c42f710541dd5d7"
 zone_id = "ec1677e19b1b70e68d591fa5b8c5aa58"
 ```
-账号ID替换`account_id`，区域ID替换`zone_id`
+**Account ID** replace`account_id`，**Zone ID** replace `zone_id`
 
-### Cloudflare配置
-1. Workers KV添加一个名称空间
-![添加名称空间](./doc/cloudflare_add_store.png)
-名字可以随意填，填完以后需要复制名称空间的ID，粘贴到`wrangler.toml`文件中
+### Cloudflare configuration
+1. Add a namespace to Workers KV
+![Add namespace](./doc/cloudflare_add_store.png)
+名字可以随意填，copy **Namespace ID**，paste to `wrangler.toml`
 ```
 { binding = "STORE", id = "c1bd122c4a5443cd9e3c0321661a3293", preview_id = "c1bd122c4a5443cd9e3c0321661a3293" },
 ```
-替换`id`和`preview_id`，这个两个id要一样，binding不要改，就填*STORE*，和你创建的名称空间名称没关系
+replace `id`和`preview_id`，two id keep same，do not change `binding`，which value is always *STORE*(no relationship with your namespace)
 
 
 ```
@@ -52,9 +54,9 @@ routes = [
    "drive.example.com/*"
 ]
 ```
-替换域名
+replace domain
 
-2. 添加OneDrive应用信息
+2. Add OneDrive application info
 
 在Azure上面注册一个app，网址`https://aka.ms/appregistrations`
 
@@ -113,13 +115,13 @@ export const TOKEN = {
 最后打开`https://your_domain/fn/conf`登录你的onedrive账号，登录成功后，程序会自动查找云盘的`index.html`文件，如果有就会显示，没有就会显示错误的数据，一般用户没有目录浏览的权限，你可以通过`https://your_domain/fn/login`用上面配置的账号登录，这样程序就会显示目录，不会再查找`index.html`文件
 
 
-# 常见问题
+# Common Issues
 1. 为什么管理员用户名和密码写死在源码中，而不是保存在KV中，可以添加多个用户
 这一点是基于性能考虑，cloudflare提供的worker访问kv的速度到底咋样，其实感受也不直观，理论上是没法避免访问kv的，毕竟onedrive的token是保存在kv中的
 
 2. 为什么不提供网页播放，而是提供外部播放器打开
 其实是有写网页播放的，地址是`/fn/play`，不过比较遗憾的是浏览器目前没办法硬解`HEVC`，同时html对mkv支持也不好，所以
 
-# 致谢
+# Credit
 
 待补充。。。
